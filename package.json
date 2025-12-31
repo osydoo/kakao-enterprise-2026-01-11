@@ -11,24 +11,20 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@emotion/react": "^11.14.0",
-    "@emotion/styled": "^11.14.1",
-    "gatsby-plugin-emotion": "^8.15.0",
     "next": "16.1.1",
     "react": "19.2.3",
     "react-dom": "19.2.3"
   },
   "devDependencies": {
+    "@tailwindcss/postcss": "^4",
     "@commitlint/cli": "^20.2.0",
     "@commitlint/config-conventional": "^20.2.0",
-    "@rushstack/eslint-patch": "^1.15.0",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@typescript-eslint/eslint-plugin": "^8.51.0",
     "eslint": "^9",
     "eslint-config-next": "16.1.1",
-    "eslint-plugin-react-refresh": "^0.4.26",
     "husky": "^9.1.7",
     "typescript": "^5"
   },
