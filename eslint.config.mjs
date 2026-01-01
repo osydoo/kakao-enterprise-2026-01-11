@@ -11,12 +11,20 @@ const eslintConfig = defineConfig([
   // Override default ignores of eslint-config-next.
   globalIgnores([
     // Default ignores of eslint-config-next:
-    ".next/**",
-    "out/**",
-    "build/**",
+    "**/node_modules/**",
+    "**/.next/**",
+    "**/dist/**",
+    "**/build/**",
+    "**/out/**",
+    "**/public/**",
     "next-env.d.ts",
+    "pnpm-lock.yaml"
   ]),
   {
+    files: [
+      "app/**/*.{ts,tsx,js,jsx}",
+      "__tests__/**/*.{ts,tsx,js,jsx}"
+    ],
     languageOptions: {
       parserOptions: {
         tsconfigRootDir: dirname,
