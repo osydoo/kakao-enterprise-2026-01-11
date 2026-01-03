@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { selectors, routes } from './utils/selectors';
-import { goToBoard, clickBoardTitle, clickMoreButton, clickMoreEdit, clickMoreDelete, confirmDelete } from './utils/helpers';
+import { goToBoard, clickBoardTitle, clickMoreEdit, clickMoreDelete, confirmDelete } from './utils/helpers';
 
 test.describe.skip('게시글 상세 페이지 테스트', () => {
   test.beforeEach(async ({ page }) => {
@@ -11,7 +11,7 @@ test.describe.skip('게시글 상세 페이지 테스트', () => {
     // 게시글이 있는지 확인
     const boardTitles = page.locator(selectors.boardTitle);
     const count = await boardTitles.count();
-    
+
     if (count === 0) {
       test.skip();
       return;
@@ -41,7 +41,7 @@ test.describe.skip('게시글 상세 페이지 테스트', () => {
     // 게시글이 있는지 확인
     const boardTitles = page.locator(selectors.boardTitle);
     const count = await boardTitles.count();
-    
+
     if (count === 0) {
       test.skip();
       return;
@@ -62,7 +62,7 @@ test.describe.skip('게시글 상세 페이지 테스트', () => {
     // 게시글이 있는지 확인
     const boardTitles = page.locator(selectors.boardTitle);
     const count = await boardTitles.count();
-    
+
     if (count === 0) {
       test.skip();
       return;
@@ -83,7 +83,7 @@ test.describe.skip('게시글 상세 페이지 테스트', () => {
     // 수정, 삭제 옵션이 표시되는지 확인
     const editOption = page.locator(selectors.moreEdit);
     const deleteOption = page.locator(selectors.moreDelete);
-    
+
     await expect(editOption).toBeVisible();
     await expect(deleteOption).toBeVisible();
   });
@@ -92,7 +92,7 @@ test.describe.skip('게시글 상세 페이지 테스트', () => {
     // 게시글이 있는지 확인
     const boardTitles = page.locator(selectors.boardTitle);
     const count = await boardTitles.count();
-    
+
     if (count === 0) {
       test.skip();
       return;
@@ -115,13 +115,13 @@ test.describe.skip('게시글 상세 페이지 테스트', () => {
     // 기존 게시글 제목과 내용이 입력 필드에 표시되는지 확인
     const formTitle = page.locator(selectors.formTitle);
     const formContent = page.locator(selectors.formContent);
-    
+
     await expect(formTitle).toBeVisible();
     await expect(formContent).toBeVisible();
-    
+
     const titleValue = await formTitle.inputValue();
     const contentValue = await formContent.inputValue();
-    
+
     expect(titleValue).toBeTruthy();
     expect(contentValue).toBeTruthy();
   });
@@ -130,7 +130,7 @@ test.describe.skip('게시글 상세 페이지 테스트', () => {
     // 게시글이 있는지 확인
     const boardTitles = page.locator(selectors.boardTitle);
     const count = await boardTitles.count();
-    
+
     if (count === 0) {
       test.skip();
       return;
@@ -156,7 +156,7 @@ test.describe.skip('게시글 상세 페이지 테스트', () => {
     // 게시글이 있는지 확인
     const boardTitles = page.locator(selectors.boardTitle);
     const count = await boardTitles.count();
-    
+
     if (count === 0) {
       test.skip();
       return;
@@ -183,10 +183,10 @@ test.describe.skip('게시글 상세 페이지 테스트', () => {
     // 삭제한 게시글이 목록에서 사라졌는지 확인
     const titlesAfterDelete = page.locator(selectors.boardTitle);
     const titlesAfterDeleteCount = await titlesAfterDelete.count();
-    
+
     // 게시글 개수가 줄었는지 확인
     expect(titlesAfterDeleteCount).toBeLessThan(count);
-    
+
     // 삭제한 제목이 목록에 없는지 확인
     if (titleToDelete) {
       const titlesText = await titlesAfterDelete.allTextContents();
@@ -194,4 +194,3 @@ test.describe.skip('게시글 상세 페이지 테스트', () => {
     }
   });
 });
-

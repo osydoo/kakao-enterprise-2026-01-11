@@ -4,7 +4,6 @@ import {
   goToHome,
   goToBoard,
   clickLnbMenu,
-  expectActiveMenu,
   searchBoard,
   clickBoardTitle,
   changeViewType,
@@ -28,7 +27,7 @@ test.describe.skip('사용자 여정 테스트 (선택사항)', () => {
     const gnb = page.locator(selectors.gnb);
     const lnb = page.locator(selectors.lnb);
     const contentArea = page.locator(selectors.contentArea);
-    
+
     await expect(gnb).toBeVisible();
     await expect(lnb).toBeVisible();
     await expect(contentArea).toBeVisible();
@@ -49,10 +48,10 @@ test.describe.skip('사용자 여정 테스트 (선택사항)', () => {
     // 게시글이 있으면 첫 번째 게시글 클릭
     const boardTitles = page.locator(selectors.boardTitle);
     const count = await boardTitles.count();
-    
+
     if (count > 0) {
       await clickBoardTitle(page, 0);
-      
+
       // 상세 페이지 확인
       const detailTitle = page.locator(selectors.detailTitle);
       await expect(detailTitle).toBeVisible();
@@ -74,11 +73,11 @@ test.describe.skip('사용자 여정 테스트 (선택사항)', () => {
     // 검색 결과 확인
     const boardTitles = page.locator(selectors.boardTitle);
     const count = await boardTitles.count();
-    
+
     if (count > 0) {
       // 검색 결과 중 하나 클릭하여 상세 페이지로 이동
       await clickBoardTitle(page, 0);
-      
+
       // 게시글 내용 확인
       const detailContent = page.locator(selectors.detailContent);
       await expect(detailContent).toBeVisible();
@@ -91,11 +90,11 @@ test.describe.skip('사용자 여정 테스트 (선택사항)', () => {
       // 페이징이 있으면 다음 페이지로 이동
       const pagination = page.locator(selectors.pagination);
       const paginationVisible = await pagination.isVisible().catch(() => false);
-      
+
       if (paginationVisible) {
         const nextButton = page.locator(selectors.paginationNext);
         const nextButtonVisible = await nextButton.isVisible().catch(() => false);
-        
+
         if (nextButtonVisible) {
           await clickPaginationNext(page);
         }
@@ -103,7 +102,7 @@ test.describe.skip('사용자 여정 테스트 (선택사항)', () => {
 
       // 카드 보기로 전환
       await changeViewType(page, 'card');
-      
+
       // 카드 형태로 게시글이 표시되는지 확인
       const boardCards = page.locator(selectors.boardCard);
       await expect(boardCards.first()).toBeVisible();
@@ -120,7 +119,7 @@ test.describe.skip('사용자 여정 테스트 (선택사항)', () => {
     // 제목과 내용 입력
     const testTitle = `작성 테스트 ${Date.now()}`;
     const testContent = '게시글 작성 테스트 내용입니다.';
-    
+
     await fillBoardForm(page, testTitle, testContent);
 
     // 등록하기 버튼 클릭
@@ -128,7 +127,7 @@ test.describe.skip('사용자 여정 테스트 (선택사항)', () => {
 
     // 게시판으로 이동하고 등록한 게시글이 목록에 표시되는지 확인
     await expect(page).toHaveURL(routes.board);
-    
+
     const boardTitles = page.locator(selectors.boardTitle);
     const titlesText = await boardTitles.allTextContents();
     expect(titlesText).toContain(testTitle);
@@ -137,35 +136,35 @@ test.describe.skip('사용자 여정 테스트 (선택사항)', () => {
     const titleIndex = titlesText.indexOf(testTitle);
     if (titleIndex !== -1) {
       await clickMoreButton(page, titleIndex);
-      
+
       // 수정 옵션 선택하여 수정 페이지로 이동
       await clickMoreEdit(page);
-      
+
       // 내용 수정
       const updatedContent = '수정된 내용입니다.';
       await fillBoardForm(page, testTitle, updatedContent);
-      
+
       // 등록하기 버튼 클릭
       await submitBoardForm(page);
-      
+
       // 수정된 내용이 반영되었는지 확인
       await expect(page).toHaveURL(routes.board);
-      
+
       // 다시 더보기 버튼 클릭하여 삭제
       const titlesAfterUpdate = page.locator(selectors.boardTitle);
       const titlesAfterUpdateText = await titlesAfterUpdate.allTextContents();
       const updatedTitleIndex = titlesAfterUpdateText.indexOf(testTitle);
-      
+
       if (updatedTitleIndex !== -1) {
         await clickMoreButton(page, updatedTitleIndex);
         await clickMoreDelete(page);
-        
+
         // 삭제 모달에서 삭제 버튼 클릭
         await confirmDelete(page);
-        
+
         // 게시글이 삭제되었는지 확인
         await expect(page).toHaveURL(routes.board);
-        
+
         const titlesAfterDelete = page.locator(selectors.boardTitle);
         const titlesAfterDeleteText = await titlesAfterDelete.allTextContents();
         expect(titlesAfterDeleteText).not.toContain(testTitle);
@@ -190,21 +189,21 @@ test.describe.skip('사용자 여정 테스트 (선택사항)', () => {
     // 검색 결과 중 하나 클릭하여 상세 페이지로 이동
     const boardTitles = page.locator(selectors.boardTitle);
     const count = await boardTitles.count();
-    
+
     if (count > 0) {
       await clickBoardTitle(page, 0);
-      
+
       // 상세 페이지에서 더보기 버튼 클릭
       const moreButton = page.locator(selectors.detailMoreButton);
       await moreButton.click();
       await page.waitForTimeout(200);
-      
+
       // 삭제 옵션 선택하여 삭제 모달 열기
       await clickMoreDelete(page);
-      
+
       // 취소 버튼 클릭하여 모달 닫기
       await cancelDelete(page);
-      
+
       // 목록 버튼 클릭하여 게시판으로 돌아가기
       const listButton = page.locator(selectors.detailListButton);
       await listButton.click();
@@ -213,11 +212,11 @@ test.describe.skip('사용자 여정 테스트 (선택사항)', () => {
       // 페이징을 통해 여러 페이지 탐색
       const pagination = page.locator(selectors.pagination);
       const paginationVisible = await pagination.isVisible().catch(() => false);
-      
+
       if (paginationVisible) {
         const nextButton = page.locator(selectors.paginationNext);
         const nextButtonVisible = await nextButton.isVisible().catch(() => false);
-        
+
         if (nextButtonVisible) {
           await clickPaginationNext(page);
         }
@@ -226,20 +225,20 @@ test.describe.skip('사용자 여정 테스트 (선택사항)', () => {
       // 게시글의 더보기 버튼 클릭하여 드롭다운 열기
       const moreButtons = page.locator(selectors.boardMoreButton);
       const moreButtonCount = await moreButtons.count();
-      
+
       if (moreButtonCount > 0) {
         await clickMoreButton(page, 0);
-        
+
         // 삭제 옵션 선택하여 삭제 모달 열기 (중첩 모달)
         await clickMoreDelete(page);
-        
+
         // 삭제 모달의 취소 버튼 클릭
         await cancelDelete(page);
-        
+
         // 드롭다운만 남아있는지 확인 (FILO 방식)
         const dropdown = page.locator(selectors.moreDropdown);
         await expect(dropdown).toBeVisible();
-        
+
         // 드롭다운도 닫기
         await page.keyboard.press('Escape');
         await expect(dropdown).not.toBeVisible();

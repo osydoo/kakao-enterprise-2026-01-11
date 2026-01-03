@@ -1,6 +1,13 @@
 import { test, expect } from '@playwright/test';
 import { selectors, routes } from './utils/selectors';
-import { goToBoard, goToBoardCreate, fillBoardForm, submitBoardForm, clickMoreButton, clickMoreEdit } from './utils/helpers';
+import {
+  goToBoard,
+  goToBoardCreate,
+  fillBoardForm,
+  submitBoardForm,
+  clickMoreButton,
+  clickMoreEdit,
+} from './utils/helpers';
 
 test.describe.skip('게시글 등록 및 수정 테스트', () => {
   test.beforeEach(async ({ page }) => {
@@ -37,10 +44,10 @@ test.describe.skip('게시글 등록 및 수정 테스트', () => {
     // 유효성 검사 에러 메시지가 표시되는지 확인
     const formError = page.locator(selectors.formError);
     const errorVisible = await formError.isVisible().catch(() => false);
-    
+
     // 에러 메시지가 표시되어야 함
     expect(errorVisible).toBe(true);
-    
+
     if (errorVisible) {
       const errorText = await formError.textContent();
       expect(errorText).toBeTruthy();
@@ -63,10 +70,10 @@ test.describe.skip('게시글 등록 및 수정 테스트', () => {
     // 유효성 검사 에러 메시지가 표시되는지 확인
     const formError = page.locator(selectors.formError);
     const errorVisible = await formError.isVisible().catch(() => false);
-    
+
     // 에러 메시지가 표시되어야 함
     expect(errorVisible).toBe(true);
-    
+
     if (errorVisible) {
       const errorText = await formError.textContent();
       expect(errorText).toBeTruthy();
@@ -89,10 +96,10 @@ test.describe.skip('게시글 등록 및 수정 테스트', () => {
     // 유효성 검사 에러 메시지가 표시되는지 확인
     const formError = page.locator(selectors.formError);
     const errorVisible = await formError.isVisible().catch(() => false);
-    
+
     // 에러 메시지가 표시되어야 함
     expect(errorVisible).toBe(true);
-    
+
     if (errorVisible) {
       const errorText = await formError.textContent();
       expect(errorText).toBeTruthy();
@@ -109,7 +116,7 @@ test.describe.skip('게시글 등록 및 수정 테스트', () => {
     // 제목과 내용 입력
     const testTitle = `테스트 게시글 ${Date.now()}`;
     const testContent = '테스트 내용입니다.';
-    
+
     await fillBoardForm(page, testTitle, testContent);
 
     // 등록하기 버튼 클릭
@@ -121,17 +128,17 @@ test.describe.skip('게시글 등록 및 수정 테스트', () => {
     // 등록한 게시글이 목록에 표시되는지 확인
     const boardTitles = page.locator(selectors.boardTitle);
     const titlesText = await boardTitles.allTextContents();
-    
+
     expect(titlesText).toContain(testTitle);
 
     // 등록한 게시글의 제목과 내용이 올바른지 확인 (상세 페이지에서)
     const titleIndex = titlesText.indexOf(testTitle);
     if (titleIndex !== -1) {
       await boardTitles.nth(titleIndex).click();
-      
+
       const detailTitle = page.locator(selectors.detailTitle);
       const detailContent = page.locator(selectors.detailContent);
-      
+
       await expect(detailTitle).toContainText(testTitle);
       await expect(detailContent).toContainText(testContent);
     }
@@ -141,7 +148,7 @@ test.describe.skip('게시글 등록 및 수정 테스트', () => {
     // 게시글이 있는지 확인
     const moreButtons = page.locator(selectors.boardMoreButton);
     const count = await moreButtons.count();
-    
+
     if (count === 0) {
       test.skip();
       return;
@@ -153,20 +160,23 @@ test.describe.skip('게시글 등록 및 수정 테스트', () => {
 
     // 페이지 타이틀에 "게시글 수정"이 표시되는지 확인
     const pageTitle = page.locator('h1, h2, [data-testid="page-title"]');
-    const pageTitleText = await pageTitle.first().textContent().catch(() => '');
+    const pageTitleText = await pageTitle
+      .first()
+      .textContent()
+      .catch(() => '');
     expect(pageTitleText).toContain('게시글 수정');
 
     // 기존 게시글 제목이 입력 필드에 표시되는지 확인
     const formTitle = page.locator(selectors.formTitle);
     await expect(formTitle).toBeVisible();
-    
+
     const titleValue = await formTitle.inputValue();
     expect(titleValue).toBeTruthy();
 
     // 기존 게시글 내용이 입력 필드에 표시되는지 확인
     const formContent = page.locator(selectors.formContent);
     await expect(formContent).toBeVisible();
-    
+
     const contentValue = await formContent.inputValue();
     expect(contentValue).toBeTruthy();
 
@@ -179,7 +189,7 @@ test.describe.skip('게시글 등록 및 수정 테스트', () => {
     // 게시글이 있는지 확인
     const moreButtons = page.locator(selectors.boardMoreButton);
     const count = await moreButtons.count();
-    
+
     if (count === 0) {
       test.skip();
       return;
@@ -196,7 +206,7 @@ test.describe.skip('게시글 등록 및 수정 테스트', () => {
     // 제목 또는 내용 수정
     const updatedTitle = `수정된 제목 ${Date.now()}`;
     const updatedContent = '수정된 내용입니다.';
-    
+
     await fillBoardForm(page, updatedTitle, updatedContent);
 
     // 등록하기 버튼 클릭
@@ -208,7 +218,7 @@ test.describe.skip('게시글 등록 및 수정 테스트', () => {
     // 수정한 내용이 반영되어 있는지 확인
     const boardTitlesAfter = page.locator(selectors.boardTitle);
     const titlesText = await boardTitlesAfter.allTextContents();
-    
+
     expect(titlesText).toContain(updatedTitle);
     expect(titlesText).not.toContain(originalTitle);
 
@@ -216,10 +226,10 @@ test.describe.skip('게시글 등록 및 수정 테스트', () => {
     const titleIndex = titlesText.indexOf(updatedTitle);
     if (titleIndex !== -1) {
       await boardTitlesAfter.nth(titleIndex).click();
-      
+
       const detailTitle = page.locator(selectors.detailTitle);
       const detailContent = page.locator(selectors.detailContent);
-      
+
       await expect(detailTitle).toContainText(updatedTitle);
       await expect(detailContent).toContainText(updatedContent);
     }
@@ -229,7 +239,7 @@ test.describe.skip('게시글 등록 및 수정 테스트', () => {
     // 게시글이 있는지 확인
     const moreButtons = page.locator(selectors.boardMoreButton);
     const count = await moreButtons.count();
-    
+
     if (count === 0) {
       test.skip();
       return;
@@ -248,7 +258,7 @@ test.describe.skip('게시글 등록 및 수정 테스트', () => {
     // 유효성 검사 에러 메시지가 표시되는지 확인
     const formError = page.locator(selectors.formError);
     const errorVisible = await formError.isVisible().catch(() => false);
-    
+
     expect(errorVisible).toBe(true);
 
     // 내용을 모두 지움
@@ -262,4 +272,3 @@ test.describe.skip('게시글 등록 및 수정 테스트', () => {
     expect(errorVisibleAfter).toBe(true);
   });
 });
-

@@ -32,13 +32,13 @@ export async function clickLnbMenu(page: Page, menu: 'home' | 'board') {
  */
 export async function searchBoard(page: Page, keyword: string, method: 'enter' | 'button' = 'enter') {
   await page.fill(selectors.searchInput, keyword);
-  
+
   if (method === 'enter') {
     await page.press(selectors.searchInput, 'Enter');
   } else {
     await page.click(selectors.searchButton);
   }
-  
+
   // 검색 결과 로딩 대기
   await page.waitForTimeout(500);
 }
@@ -122,7 +122,7 @@ export async function cancelDelete(page: Page) {
 export async function changeViewType(page: Page, type: 'list' | 'card') {
   await page.click(selectors.viewTypeToggle);
   await page.waitForTimeout(200); // 드롭다운 애니메이션 대기
-  
+
   const optionSelector = type === 'list' ? selectors.viewTypeList : selectors.viewTypeCard;
   await page.click(optionSelector);
   await page.waitForTimeout(300); // 레이아웃 변경 대기
@@ -192,4 +192,3 @@ export async function getBoardCount(page: Page, viewType: 'list' | 'card' = 'lis
     return await page.locator(selectors.boardCard).count();
   }
 }
-

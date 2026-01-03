@@ -37,7 +37,7 @@ test.describe.skip('서비스 게시판 기본 기능 및 예외 처리', () => 
     // 검색 결과 확인
     const boardTitles = page.locator(selectors.boardTitle);
     const count = await boardTitles.count();
-    
+
     // 검색 결과가 있는 경우, 검색어가 포함되어 있는지 확인
     if (count > 0) {
       for (let i = 0; i < Math.min(count, 3); i++) {
@@ -55,7 +55,7 @@ test.describe.skip('서비스 게시판 기본 기능 및 예외 처리', () => 
     // 검색 결과 확인
     const boardTitles = page.locator(selectors.boardTitle);
     const count = await boardTitles.count();
-    
+
     // 검색 결과가 있는 경우, 검색어가 포함되어 있는지 확인
     if (count > 0) {
       for (let i = 0; i < Math.min(count, 3); i++) {
@@ -69,7 +69,7 @@ test.describe.skip('서비스 게시판 기본 기능 및 예외 처리', () => 
     // 게시글이 있는지 확인
     const boardTitles = page.locator(selectors.boardTitle);
     const count = await boardTitles.count();
-    
+
     if (count > 0) {
       // 첫 번째 게시글 제목 클릭
       await clickBoardTitle(page, 0);
@@ -80,7 +80,7 @@ test.describe.skip('서비스 게시판 기본 기능 및 예외 처리', () => 
       // 게시글 제목과 내용이 표시되는지 확인
       const detailTitle = page.locator(selectors.detailTitle);
       const detailContent = page.locator(selectors.detailContent);
-      
+
       await expect(detailTitle).toBeVisible();
       await expect(detailContent).toBeVisible();
 
@@ -107,7 +107,7 @@ test.describe.skip('서비스 게시판 기본 기능 및 예외 처리', () => 
   test('TC-022: 한 페이지당 최대 데이터 개수 확인', async ({ page }) => {
     // 게시글 개수 확인
     const boardCount = await getBoardCount(page, 'list');
-    
+
     // 한 페이지당 최대 10개인지 확인
     expect(boardCount).toBeLessThanOrEqual(10);
 
@@ -115,7 +115,8 @@ test.describe.skip('서비스 게시판 기본 기능 및 예외 처리', () => 
     if (boardCount === 10) {
       const pagination = page.locator(selectors.pagination);
       const paginationVisible = await pagination.isVisible().catch(() => false);
-      
+
+      console.log('paginationVisible', paginationVisible);
       // 페이징이 표시될 수 있음 (다음 페이지가 있는 경우)
       // 실제 구현에 따라 다를 수 있음
     }
@@ -124,16 +125,16 @@ test.describe.skip('서비스 게시판 기본 기능 및 예외 처리', () => 
   test('TC-023: 게시글이 없을 때 빈 상태 표시', async ({ page }) => {
     // 모든 게시글 삭제 (실제로는 테스트 데이터를 초기화하거나 빈 상태를 확인)
     // 여기서는 빈 상태 메시지가 표시되는지만 확인
-    
+
     const emptyMessage = page.locator(selectors.emptyMessage);
     const emptyMessageVisible = await emptyMessage.isVisible().catch(() => false);
-    
+
     const boardCount = await getBoardCount(page, 'list');
-    
+
     if (boardCount === 0) {
       // 빈 상태 메시지가 표시되어야 함
       expect(emptyMessageVisible).toBe(true);
-      
+
       if (emptyMessageVisible) {
         const message = await emptyMessage.textContent();
         expect(message).toContain('등록된 게시글이 없습니다');
@@ -156,11 +157,13 @@ test.describe.skip('서비스 게시판 기본 기능 및 예외 처리', () => 
     // 로딩 인디케이터가 표시되는지 확인
     const loadingIndicator = page.locator(selectors.loadingIndicator);
     const loadingVisible = await loadingIndicator.isVisible().catch(() => false);
-    
+
+    console.log('loadingVisible', loadingVisible);
+
     // 로딩 상태가 표시될 수 있음 (구현된 경우)
     // 데이터가 로드되면 로딩 인디케이터가 사라지는지 확인
     await page.waitForTimeout(2000);
-    
+
     const loadingAfterLoad = await loadingIndicator.isVisible().catch(() => false);
     expect(loadingAfterLoad).toBe(false);
   });
@@ -175,7 +178,7 @@ test.describe.skip('서비스 게시판 기본 기능 및 예외 처리', () => 
     // 에러 메시지가 표시되는지 확인
     const errorMessage = page.locator(selectors.errorMessage);
     const errorVisible = await errorMessage.isVisible().catch(() => false);
-    
+
     // 에러 상태가 표시될 수 있음 (구현된 경우)
     if (errorVisible) {
       const message = await errorMessage.textContent();
@@ -186,4 +189,3 @@ test.describe.skip('서비스 게시판 기본 기능 및 예외 처리', () => 
     await context.setOffline(false);
   });
 });
-

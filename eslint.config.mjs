@@ -1,7 +1,7 @@
-import { defineConfig, globalIgnores } from "eslint/config";
-import nextVitals from "eslint-config-next/core-web-vitals";
-import nextTs from "eslint-config-next/typescript";
-import { fileURLToPath } from "url";
+import { defineConfig, globalIgnores } from 'eslint/config';
+import nextVitals from 'eslint-config-next/core-web-vitals';
+import nextTs from 'eslint-config-next/typescript';
+import { fileURLToPath } from 'url';
 
 const dirname = fileURLToPath(new URL('.', import.meta.url));
 
@@ -11,20 +11,17 @@ const eslintConfig = defineConfig([
   // Override default ignores of eslint-config-next.
   globalIgnores([
     // Default ignores of eslint-config-next:
-    "**/node_modules/**",
-    "**/.next/**",
-    "**/dist/**",
-    "**/build/**",
-    "**/out/**",
-    "**/public/**",
-    "next-env.d.ts",
-    "pnpm-lock.yaml"
+    '**/node_modules/**',
+    '**/.next/**',
+    '**/dist/**',
+    '**/build/**',
+    '**/out/**',
+    '**/public/**',
+    'next-env.d.ts',
+    'pnpm-lock.yaml',
   ]),
   {
-    files: [
-      "app/**/*.{ts,tsx,js,jsx}",
-      "__tests__/**/*.{ts,tsx,js,jsx}"
-    ],
+    files: ['app/**/*.{ts,tsx,js,jsx}', '__tests__/**/*.{ts,tsx,js,jsx}'],
     languageOptions: {
       parserOptions: {
         tsconfigRootDir: dirname,

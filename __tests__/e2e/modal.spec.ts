@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { selectors } from './utils/selectors';
-import { goToBoard, clickMoreButton, clickMoreDelete, cancelDelete, confirmDelete } from './utils/helpers';
+import { goToBoard, clickMoreButton, clickMoreDelete, cancelDelete } from './utils/helpers';
 
 test.describe.skip('모달 관련 테스트', () => {
   test.beforeEach(async ({ page }) => {
@@ -11,7 +11,7 @@ test.describe.skip('모달 관련 테스트', () => {
     // 게시글이 있는지 확인
     const moreButtons = page.locator(selectors.boardMoreButton);
     const count = await moreButtons.count();
-    
+
     if (count === 0) {
       test.skip();
       return;
@@ -34,7 +34,7 @@ test.describe.skip('모달 관련 테스트', () => {
       const style = window.getComputedStyle(el);
       return parseFloat(style.opacity);
     });
-    
+
     expect(backdropOpacity).toBeLessThan(1);
     expect(backdropOpacity).toBeGreaterThan(0);
   });
@@ -43,7 +43,7 @@ test.describe.skip('모달 관련 테스트', () => {
     // 게시글이 있는지 확인
     const moreButtons = page.locator(selectors.boardMoreButton);
     const count = await moreButtons.count();
-    
+
     if (count === 0) {
       test.skip();
       return;
@@ -69,7 +69,7 @@ test.describe.skip('모달 관련 테스트', () => {
     // 게시글이 있는지 확인
     const moreButtons = page.locator(selectors.boardMoreButton);
     const count = await moreButtons.count();
-    
+
     if (count === 0) {
       test.skip();
       return;
@@ -77,13 +77,13 @@ test.describe.skip('모달 관련 테스트', () => {
 
     // 첫 번째 모달(드롭다운) 열기
     await clickMoreButton(page, 0);
-    
+
     const dropdown = page.locator(selectors.moreDropdown);
     await expect(dropdown).toBeVisible();
 
     // 두 번째 모달(삭제 확인 모달) 열기
     await clickMoreDelete(page);
-    
+
     const deleteModal = page.locator(selectors.deleteModal);
     await expect(deleteModal).toBeVisible();
 
@@ -103,7 +103,7 @@ test.describe.skip('모달 관련 테스트', () => {
     // 게시글이 있는지 확인
     const moreButtons = page.locator(selectors.boardMoreButton);
     const count = await moreButtons.count();
-    
+
     if (count === 0) {
       test.skip();
       return;
@@ -111,17 +111,17 @@ test.describe.skip('모달 관련 테스트', () => {
 
     // 첫 번째 모달(드롭다운) 열기
     await clickMoreButton(page, 0);
-    
+
     // 두 번째 모달(삭제 확인 모달) 열기
     await clickMoreDelete(page);
-    
+
     const deleteModal = page.locator(selectors.deleteModal);
     await expect(deleteModal).toBeVisible();
 
     // 백드롭 레이어가 하나만 표시되는지 확인
     const backdrops = page.locator(selectors.modalBackdrop);
     const backdropCount = await backdrops.count();
-    
+
     // 구현된 경우 백드롭이 하나만 있어야 함
     // 구현되지 않은 경우도 있으므로 스킵하지 않고 확인만 함
     if (backdropCount === 1) {
@@ -130,4 +130,3 @@ test.describe.skip('모달 관련 테스트', () => {
     }
   });
 });
-

@@ -7,6 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "test": "playwright test",
     "test:ui": "playwright test --ui",
     "prepare": "husky",
@@ -32,6 +34,8 @@
     "eslint": "^9",
     "eslint-config-next": "16.1.1",
     "husky": "^9.1.7",
+    "prettier": "^3.4.2",
+    "tailwindcss": "^4.1.18",
     "typescript": "^5"
   },
   "engines": {

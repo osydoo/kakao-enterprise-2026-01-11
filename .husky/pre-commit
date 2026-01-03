@@ -1,4 +1,4 @@
-pnpm lint
 pnpm type-check
+pnpm lint
+pnpm format
 pnpm test
-

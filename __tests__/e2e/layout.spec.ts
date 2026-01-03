@@ -1,6 +1,15 @@
 import { test, expect } from '@playwright/test';
 import { selectors, routes } from './utils/selectors';
-import { goToHome, goToBoard, clickLnbMenu, expectActiveMenu, clickBoardTitle, goToBoardCreate, clickMoreButton, clickMoreEdit } from './utils/helpers';
+import {
+  goToHome,
+  goToBoard,
+  clickLnbMenu,
+  expectActiveMenu,
+  clickBoardTitle,
+  goToBoardCreate,
+  clickMoreButton,
+  clickMoreEdit,
+} from './utils/helpers';
 
 test.describe.skip('기본 페이지 및 레이아웃 구성', () => {
   test('TC-001: 기본 레이아웃 요소 표시 확인', async ({ page }) => {
@@ -27,7 +36,7 @@ test.describe.skip('기본 페이지 및 레이아웃 구성', () => {
     // LNB 메뉴 아이템 확인
     const homeMenu = page.locator(selectors.lnbHome);
     const boardMenu = page.locator(selectors.lnbBoard);
-    
+
     await expect(homeMenu).toBeVisible();
     await expect(boardMenu).toBeVisible();
 
@@ -56,7 +65,7 @@ test.describe.skip('기본 페이지 및 레이아웃 구성', () => {
     // 게시글이 있는지 확인
     const boardTitles = page.locator(selectors.boardTitle);
     const count = await boardTitles.count();
-    
+
     if (count > 0) {
       // 첫 번째 게시글 제목 클릭하여 상세 페이지로 이동
       await clickBoardTitle(page, 0);
@@ -84,7 +93,7 @@ test.describe.skip('기본 페이지 및 레이아웃 구성', () => {
     // 게시글이 있는지 확인
     const moreButtons = page.locator(selectors.boardMoreButton);
     const count = await moreButtons.count();
-    
+
     if (count > 0) {
       // 더보기 버튼 클릭하여 수정 페이지로 이동
       await clickMoreButton(page, 0);
@@ -108,12 +117,12 @@ test.describe.skip('기본 페이지 및 레이아웃 구성', () => {
     // GNB와 LNB가 고정되어 있는지 확인 (position: fixed 또는 sticky)
     const gnb = page.locator(selectors.gnb);
     const lnb = page.locator(selectors.lnb);
-    
+
     const gnbPosition = await gnb.evaluate((el) => {
       const style = window.getComputedStyle(el);
       return style.position;
     });
-    
+
     const lnbPosition = await lnb.evaluate((el) => {
       const style = window.getComputedStyle(el);
       return style.position;
@@ -134,7 +143,7 @@ test.describe.skip('기본 페이지 및 레이아웃 구성', () => {
       await contentArea.evaluate((el) => {
         el.scrollTop = 100;
       });
-      
+
       const scrollTop = await contentArea.evaluate((el) => el.scrollTop);
       expect(scrollTop).toBeGreaterThan(0);
     }

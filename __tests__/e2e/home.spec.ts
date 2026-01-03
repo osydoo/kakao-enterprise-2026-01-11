@@ -17,7 +17,7 @@ test.describe.skip('홈 페이지 테스트', () => {
     // 이미지 아이템 확인
     const imageItems = page.locator(selectors.homeImageItem);
     const imageCount = await imageItems.count();
-    
+
     // 정확히 4개인지 확인 (2x2)
     expect(imageCount).toBe(4);
 
@@ -25,10 +25,10 @@ test.describe.skip('홈 페이지 테스트', () => {
     if (imageCount >= 2) {
       const firstImage = imageItems.nth(0);
       const secondImage = imageItems.nth(1);
-      
+
       const firstWidth = await firstImage.evaluate((el) => el.clientWidth);
       const secondWidth = await secondImage.evaluate((el) => el.clientWidth);
-      
+
       // 넓이가 동일한지 확인 (약간의 오차 허용)
       expect(Math.abs(firstWidth - secondWidth)).toBeLessThan(5);
     }
@@ -36,7 +36,7 @@ test.describe.skip('홈 페이지 테스트', () => {
     // 브라우저 넓이에 맞게 조정되는지 확인
     const gridWidth = await imageGrid.evaluate((el) => el.clientWidth);
     const viewportWidth = page.viewportSize()?.width || 1280;
-    
+
     // 그리드가 뷰포트 넓이에 맞게 조정되는지 확인
     expect(gridWidth).toBeGreaterThan(viewportWidth * 0.8);
   });
@@ -83,4 +83,3 @@ test.describe.skip('홈 페이지 테스트', () => {
     expect(viewType).toBe('list');
   });
 });
-

@@ -1,6 +1,16 @@
 import { test, expect } from '@playwright/test';
 import { selectors } from './utils/selectors';
-import { goToBoard, clickMoreButton, clickMoreEdit, clickMoreDelete, confirmDelete, cancelDelete, changeViewType, getLocalStorage, clearLocalStorage } from './utils/helpers';
+import {
+  goToBoard,
+  clickMoreButton,
+  clickMoreEdit,
+  clickMoreDelete,
+  confirmDelete,
+  cancelDelete,
+  changeViewType,
+  getLocalStorage,
+  clearLocalStorage,
+} from './utils/helpers';
 
 test.describe.skip('서비스 게시판 더보기 버튼 액션 및 UI 타입 변경', () => {
   test.beforeEach(async ({ page }) => {
@@ -11,7 +21,7 @@ test.describe.skip('서비스 게시판 더보기 버튼 액션 및 UI 타입 �
     // 게시글이 있는지 확인
     const moreButtons = page.locator(selectors.boardMoreButton);
     const count = await moreButtons.count();
-    
+
     if (count === 0) {
       test.skip();
       return;
@@ -27,7 +37,7 @@ test.describe.skip('서비스 게시판 더보기 버튼 액션 및 UI 타입 �
     // 수정, 삭제 옵션이 표시되는지 확인
     const editOption = page.locator(selectors.moreEdit);
     const deleteOption = page.locator(selectors.moreDelete);
-    
+
     await expect(editOption).toBeVisible();
     await expect(deleteOption).toBeVisible();
   });
@@ -36,7 +46,7 @@ test.describe.skip('서비스 게시판 더보기 버튼 액션 및 UI 타입 �
     // 게시글이 있는지 확인
     const moreButtons = page.locator(selectors.boardMoreButton);
     const count = await moreButtons.count();
-    
+
     if (count === 0) {
       test.skip();
       return;
@@ -54,13 +64,13 @@ test.describe.skip('서비스 게시판 더보기 버튼 액션 및 UI 타입 �
     // 기존 게시글 제목과 내용이 입력 필드에 표시되는지 확인
     const formTitle = page.locator(selectors.formTitle);
     const formContent = page.locator(selectors.formContent);
-    
+
     await expect(formTitle).toBeVisible();
     await expect(formContent).toBeVisible();
-    
+
     const titleValue = await formTitle.inputValue();
     const contentValue = await formContent.inputValue();
-    
+
     expect(titleValue).toBeTruthy();
     expect(contentValue).toBeTruthy();
   });
@@ -69,7 +79,7 @@ test.describe.skip('서비스 게시판 더보기 버튼 액션 및 UI 타입 �
     // 게시글이 있는지 확인
     const moreButtons = page.locator(selectors.boardMoreButton);
     const count = await moreButtons.count();
-    
+
     if (count === 0) {
       test.skip();
       return;
@@ -94,7 +104,7 @@ test.describe.skip('서비스 게시판 더보기 버튼 액션 및 UI 타입 �
     // 게시글이 있는지 확인
     const moreButtons = page.locator(selectors.boardMoreButton);
     const count = await moreButtons.count();
-    
+
     if (count === 0) {
       test.skip();
       return;
@@ -117,10 +127,10 @@ test.describe.skip('서비스 게시판 더보기 버튼 액션 및 UI 타입 �
     // 삭제한 게시글이 목록에서 사라졌는지 확인
     const titlesAfterDelete = page.locator(selectors.boardTitle);
     const titlesAfterDeleteCount = await titlesAfterDelete.count();
-    
+
     // 게시글 개수가 줄었는지 확인
     expect(titlesAfterDeleteCount).toBeLessThan(count);
-    
+
     // 삭제한 제목이 목록에 없는지 확인
     if (titleToDelete) {
       const titlesText = await titlesAfterDelete.allTextContents();
@@ -132,7 +142,7 @@ test.describe.skip('서비스 게시판 더보기 버튼 액션 및 UI 타입 �
     // 게시글이 있는지 확인
     const moreButtons = page.locator(selectors.boardMoreButton);
     const count = await moreButtons.count();
-    
+
     if (count === 0) {
       test.skip();
       return;
@@ -156,9 +166,9 @@ test.describe.skip('서비스 게시판 더보기 버튼 액션 및 UI 타입 �
     // 게시글이 삭제되지 않고 목록에 남아있는지 확인
     const titlesAfterCancel = page.locator(selectors.boardTitle);
     const titlesAfterCancelCount = await titlesAfterCancel.count();
-    
+
     expect(titlesAfterCancelCount).toBe(count);
-    
+
     if (titleToKeep) {
       const titlesText = await titlesAfterCancel.allTextContents();
       expect(titlesText).toContain(titleToKeep);
@@ -183,7 +193,7 @@ test.describe.skip('서비스 게시판 더보기 버튼 액션 및 UI 타입 �
     // 각 카드에 더보기 버튼이 표시되는지 확인
     const cardMoreButtons = page.locator(`${selectors.boardCard} ${selectors.boardMoreButton}`);
     const cardMoreButtonCount = await cardMoreButtons.count();
-    
+
     if (cardMoreButtonCount > 0) {
       await expect(cardMoreButtons.first()).toBeVisible();
     }
@@ -194,7 +204,7 @@ test.describe.skip('서비스 게시판 더보기 버튼 액션 및 UI 타입 �
     // 카드 보기 상태가 유지되는지 확인
     const viewType = await getLocalStorage(page, 'boardViewType');
     expect(viewType).toBe('card');
-    
+
     const boardCardsAfterReload = page.locator(selectors.boardCard);
     await expect(boardCardsAfterReload.first()).toBeVisible();
   });
@@ -220,7 +230,7 @@ test.describe.skip('서비스 게시판 더보기 버튼 액션 및 UI 타입 �
     // 게시글이 있는지 확인
     const boardCards = page.locator(selectors.boardCard);
     const cardCount = await boardCards.count();
-    
+
     if (cardCount === 0) {
       test.skip();
       return;
@@ -229,7 +239,7 @@ test.describe.skip('서비스 게시판 더보기 버튼 액션 및 UI 타입 �
     // 카드의 더보기 버튼 클릭
     const cardMoreButtons = page.locator(`${selectors.boardCard} ${selectors.boardMoreButton}`);
     const cardMoreButtonCount = await cardMoreButtons.count();
-    
+
     if (cardMoreButtonCount > 0) {
       await cardMoreButtons.first().click();
       await page.waitForTimeout(200);
@@ -241,7 +251,7 @@ test.describe.skip('서비스 게시판 더보기 버튼 액션 및 UI 타입 �
       // 수정 또는 삭제 옵션 클릭하여 기능이 정상 동작하는지 확인
       const editOption = page.locator(selectors.moreEdit);
       const editOptionVisible = await editOption.isVisible().catch(() => false);
-      
+
       if (editOptionVisible) {
         // 수정 기능 테스트는 별도 테스트에서 수행
         // 여기서는 드롭다운이 정상 동작하는지만 확인
@@ -252,4 +262,3 @@ test.describe.skip('서비스 게시판 더보기 버튼 액션 및 UI 타입 �
     }
   });
 });
-
