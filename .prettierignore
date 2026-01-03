@@ -63,3 +63,7 @@ Thumbs.db
 # Test results
 test-results/
 playwright-report/
+
+# pnpm
+.pnpm-store/
+pnpm-lock.yaml
