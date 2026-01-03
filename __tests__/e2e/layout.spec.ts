@@ -1,0 +1,142 @@
+import { test, expect } from '@playwright/test';
+import { selectors, routes } from './utils/selectors';
+import { goToHome, goToBoard, clickLnbMenu, expectActiveMenu, clickBoardTitle, goToBoardCreate, clickMoreButton, clickMoreEdit } from './utils/helpers';
+
+test.describe.skip('기본 페이지 및 레이아웃 구성', () => {
+  test('TC-001: 기본 레이아웃 요소 표시 확인', async ({ page }) => {
+    // 홈 페이지 접속
+    await goToHome(page);
+
+    // GNB 확인
+    const gnb = page.locator(selectors.gnb);
+    await expect(gnb).toBeVisible();
+
+    // LNB 확인
+    const lnb = page.locator(selectors.lnb);
+    await expect(lnb).toBeVisible();
+
+    // 콘텐츠 영역 확인
+    const contentArea = page.locator(selectors.contentArea);
+    await expect(contentArea).toBeVisible();
+  });
+
+  test('TC-002: LNB 메뉴 아이템 표시 및 활성화 상태', async ({ page }) => {
+    // 홈 페이지 접속
+    await goToHome(page);
+
+    // LNB 메뉴 아이템 확인
+    const homeMenu = page.locator(selectors.lnbHome);
+    const boardMenu = page.locator(selectors.lnbBoard);
+    
+    await expect(homeMenu).toBeVisible();
+    await expect(boardMenu).toBeVisible();
+
+    // 홈 메뉴가 활성화 상태인지 확인
+    await expectActiveMenu(page, 'home');
+
+    // 서비스게시판 메뉴 클릭
+    await clickLnbMenu(page, 'board');
+    await expect(page).toHaveURL(routes.board);
+
+    // 서비스게시판 메뉴가 활성화 상태인지 확인
+    await expectActiveMenu(page, 'board');
+
+    // 다시 홈 메뉴 클릭
+    await clickLnbMenu(page, 'home');
+    await expect(page).toHaveURL(routes.home);
+
+    // 홈 메뉴가 활성화 상태인지 확인
+    await expectActiveMenu(page, 'home');
+  });
+
+  test('TC-003: 게시글 상세 페이지에서 LNB 메뉴 활성화 상태', async ({ page }) => {
+    // 서비스 게시판 접속
+    await goToBoard(page);
+
+    // 게시글이 있는지 확인
+    const boardTitles = page.locator(selectors.boardTitle);
+    const count = await boardTitles.count();
+    
+    if (count > 0) {
+      // 첫 번째 게시글 제목 클릭하여 상세 페이지로 이동
+      await clickBoardTitle(page, 0);
+
+      // 서비스게시판 메뉴가 활성화 상태로 유지되는지 확인
+      await expectActiveMenu(page, 'board');
+    } else {
+      test.skip();
+    }
+  });
+
+  test('TC-004: 게시글 등록/수정 페이지에서 LNB 메뉴 활성화 상태', async ({ page }) => {
+    // 서비스 게시판 접속
+    await goToBoard(page);
+
+    // 등록 버튼 클릭하여 등록 페이지로 이동
+    await goToBoardCreate(page);
+
+    // 서비스게시판 메뉴가 활성화 상태로 유지되는지 확인
+    await expectActiveMenu(page, 'board');
+
+    // 게시판으로 돌아가기
+    await goToBoard(page);
+
+    // 게시글이 있는지 확인
+    const moreButtons = page.locator(selectors.boardMoreButton);
+    const count = await moreButtons.count();
+    
+    if (count > 0) {
+      // 더보기 버튼 클릭하여 수정 페이지로 이동
+      await clickMoreButton(page, 0);
+      await clickMoreEdit(page);
+
+      // 서비스게시판 메뉴가 활성화 상태로 유지되는지 확인
+      await expectActiveMenu(page, 'board');
+    } else {
+      test.skip();
+    }
+  });
+
+  test('TC-005: 콘텐츠 영역 스크롤 동작', async ({ page }) => {
+    // 서비스 게시판 접속
+    await goToBoard(page);
+
+    // 콘텐츠 영역 확인
+    const contentArea = page.locator(selectors.contentArea);
+    await expect(contentArea).toBeVisible();
+
+    // GNB와 LNB가 고정되어 있는지 확인 (position: fixed 또는 sticky)
+    const gnb = page.locator(selectors.gnb);
+    const lnb = page.locator(selectors.lnb);
+    
+    const gnbPosition = await gnb.evaluate((el) => {
+      const style = window.getComputedStyle(el);
+      return style.position;
+    });
+    
+    const lnbPosition = await lnb.evaluate((el) => {
+      const style = window.getComputedStyle(el);
+      return style.position;
+    });
+
+    // GNB와 LNB가 fixed 또는 sticky인지 확인
+    expect(['fixed', 'sticky']).toContain(gnbPosition);
+    expect(['fixed', 'sticky']).toContain(lnbPosition);
+
+    // 콘텐츠 영역이 스크롤 가능한지 확인
+    const contentScrollable = await contentArea.evaluate((el) => {
+      return el.scrollHeight > el.clientHeight;
+    });
+
+    // 게시글이 많으면 스크롤 가능해야 함
+    if (contentScrollable) {
+      // 스크롤 테스트
+      await contentArea.evaluate((el) => {
+        el.scrollTop = 100;
+      });
+      
+      const scrollTop = await contentArea.evaluate((el) => el.scrollTop);
+      expect(scrollTop).toBeGreaterThan(0);
+    }
+  });
+});
