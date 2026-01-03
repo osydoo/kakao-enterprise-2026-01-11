@@ -15,7 +15,7 @@ const customJestConfig = {
   },
   testEnvironment: 'jest-environment-jsdom',
   // app 폴더 바로 아래의 .test.* 파일만 테스트 실행
-  testMatch: ['<rootDir>/app/**/*.test.*'],
+  testMatch: ['<rootDir>/src/**/*.test.*'],
 };
 
 // createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async
