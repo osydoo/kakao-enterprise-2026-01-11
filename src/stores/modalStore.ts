@@ -3,7 +3,7 @@ import { create } from 'zustand';
 export interface ModalConfig<T extends Record<string, unknown> = Record<string, unknown>> {
   id: string;
   Component: React.FC<T>;
-  onClose?: () => void;
+  callback?: () => void;
   props?: T;
 }
 
@@ -29,8 +29,8 @@ export const useModalStore = create<ModalStore>((set, get) => ({
     const { modals } = get();
     const modalToClose = modals.find((modal) => modal.id === id);
 
-    if (modalToClose?.onClose) {
-      modalToClose.onClose();
+    if (modalToClose?.callback) {
+      modalToClose.callback();
     }
 
     set((state) => ({
@@ -49,8 +49,8 @@ export const useModalStore = create<ModalStore>((set, get) => ({
 
     // 모든 모달의 onClose 콜백을 실행
     modals.forEach((modal) => {
-      if (modal.onClose) {
-        modal.onClose();
+      if (modal.callback) {
+        modal.callback();
       }
     });
 
