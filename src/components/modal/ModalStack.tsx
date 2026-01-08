@@ -23,16 +23,19 @@ export const ModalStack: React.FC = () => {
   }, [modals.length]);
 
   // ESC 키로 모달 닫기
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        closeLastModal();
-      }
-    };
+  useEffect(
+    function handleKeyDown() {
+      const handleKeyDown = (event: KeyboardEvent) => {
+        if (event.key === 'Escape') {
+          closeLastModal();
+        }
+      };
 
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [closeLastModal]);
+      document.addEventListener('keydown', handleKeyDown);
+      return () => document.removeEventListener('keydown', handleKeyDown);
+    },
+    [closeLastModal],
+  );
 
   if (modals.length === 0) {
     return null;

@@ -12,21 +12,24 @@ interface Options {
 export function useOutsidePointerDown({ open, refs, onOutside }: Options) {
   const refsRef = useRef(refs);
 
-  useEffect(() => {
-    if (!open) return;
+  useEffect(
+    function handlePointerDown() {
+      if (!open) return;
 
-    const handlePointerDown = (event: PointerEvent) => {
-      const target = event.target as Node | null;
-      if (!target) return;
+      const handlePointerDown = (event: PointerEvent) => {
+        const target = event.target as Node | null;
+        if (!target) return;
 
-      for (const ref of refsRef.current) {
-        const el = ref.current;
-        if (el && el.contains(target)) return;
-      }
-      onOutside();
-    };
+        for (const ref of refsRef.current) {
+          const el = ref.current;
+          if (el && el.contains(target)) return;
+        }
+        onOutside();
+      };
 
-    document.addEventListener('pointerdown', handlePointerDown, true);
-    return () => document.removeEventListener('pointerdown', handlePointerDown, true);
-  }, [open, onOutside]);
+      document.addEventListener('pointerdown', handlePointerDown, true);
+      return () => document.removeEventListener('pointerdown', handlePointerDown, true);
+    },
+    [open, onOutside],
+  );
 }
