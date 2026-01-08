@@ -25,17 +25,20 @@ export default defineConfig({
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: 'html',
+  // HTML 리포트(playwright-report/) 생성 방지
+  reporter: 'list',
+  // test-results/ 생성/보존 방지
+  // (실패 아티팩트 포함 outputDir을 테스트 종료 후 정리)
+  preserveOutput: 'never',
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
     baseURL: process.env.PLAYWRIGHT_BASE_URL || 'http://localhost:3000',
     /* Maximum time each action such as `click()` can take. Defaults to 0 (no limit). */
     actionTimeout: 5 * 1000,
-    /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: 'on-first-retry',
-    /* Take screenshot on failure */
-    screenshot: 'only-on-failure',
+    // test-results/에 저장되는 아티팩트 생성 방지
+    trace: 'off',
+    screenshot: 'off',
   },
 
   /* Configure projects for major browsers */

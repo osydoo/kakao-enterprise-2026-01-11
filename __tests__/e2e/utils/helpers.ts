@@ -5,6 +5,17 @@ import { routes, ui } from './selectors';
  * 공통 헬퍼 함수
  */
 
+function isHttpUrl(url: string) {
+  return url.startsWith('http://') || url.startsWith('https://');
+}
+
+async function ensureStorageAvailable(page: Page) {
+  // about:blank 등에서는 localStorage 접근이 막혀 SecurityError가 발생할 수 있음
+  if (!isHttpUrl(page.url())) {
+    await page.goto(routes.home);
+  }
+}
+
 /**
  * 홈 페이지로 이동
  */
@@ -157,6 +168,7 @@ export async function clickPaginationPrev(page: Page) {
  * localStorage 확인
  */
 export async function getLocalStorage(page: Page, key: string): Promise<string | null> {
+  await ensureStorageAvailable(page);
   return await page.evaluate((k) => localStorage.getItem(k), key);
 }
 
@@ -164,6 +176,7 @@ export async function getLocalStorage(page: Page, key: string): Promise<string |
  * localStorage 설정
  */
 export async function setLocalStorage(page: Page, key: string, value: string) {
+  await ensureStorageAvailable(page);
   await page.evaluate(({ k, v }) => localStorage.setItem(k, v), { k: key, v: value });
 }
 
@@ -171,6 +184,7 @@ export async function setLocalStorage(page: Page, key: string, value: string) {
  * localStorage 초기화
  */
 export async function clearLocalStorage(page: Page) {
+  await ensureStorageAvailable(page);
   await page.evaluate(() => localStorage.clear());
 }
 

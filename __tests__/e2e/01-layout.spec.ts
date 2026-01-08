@@ -6,12 +6,12 @@ import {
   clickLnbMenu,
   expectActiveMenu,
   clickBoardTitle,
-  goToBoardCreate,
-  clickMoreButton,
-  clickMoreEdit,
+  changeViewType,
+  getLocalStorage,
+  clearLocalStorage,
 } from './utils/helpers';
 
-test.describe.skip('기본 페이지 및 레이아웃 구성', () => {
+test.describe('기본 페이지 및 레이아웃 구성', () => {
   test('TC-1-1: 기본 레이아웃 요소 표시 확인', async ({ page }) => {
     // 홈 페이지 접속
     await goToHome(page);
@@ -78,32 +78,15 @@ test.describe.skip('기본 페이지 및 레이아웃 구성', () => {
   });
 
   test('TC-1-4: 게시글 등록/수정 페이지에서 LNB 메뉴 활성화 상태', async ({ page }) => {
-    // 서비스 게시판 접속
-    await goToBoard(page);
-
-    // 등록 버튼 클릭하여 등록 페이지로 이동
-    await goToBoardCreate(page);
+    // URL 이동으로 등록 페이지 진입 (UI 플로우 의존도 제거)
+    await page.goto(routes.boardCreate);
 
     // 서비스게시판 메뉴가 활성화 상태로 유지되는지 확인
     await expectActiveMenu(page, 'board');
 
-    // 게시판으로 돌아가기
-    await goToBoard(page);
-
-    // 게시글이 있는지 확인
-    const moreButtons = ui.boardMoreButton(page);
-    const count = await moreButtons.count();
-
-    if (count > 0) {
-      // 더보기 버튼 클릭하여 수정 페이지로 이동
-      await clickMoreButton(page, 0);
-      await clickMoreEdit(page);
-
-      // 서비스게시판 메뉴가 활성화 상태로 유지되는지 확인
-      await expectActiveMenu(page, 'board');
-    } else {
-      test.skip();
-    }
+    // URL 이동으로 수정 페이지 진입 (데이터/더보기 메뉴 의존도 제거)
+    await page.goto(routes.boardEdit(1));
+    await expectActiveMenu(page, 'board');
   });
 
   test('TC-1-5: 콘텐츠 영역 스크롤 동작', async ({ page }) => {
@@ -147,5 +130,20 @@ test.describe.skip('기본 페이지 및 레이아웃 구성', () => {
       const scrollTop = await contentArea.evaluate((el) => el.scrollTop);
       expect(scrollTop).toBeGreaterThan(0);
     }
+  });
+
+  test('TC-1-6: GNB 우측 보기 타입 드롭다운 표시 및 저장', async ({ page }) => {
+    await clearLocalStorage(page);
+    await goToHome(page);
+
+    // 드롭다운 토글이 보이는지 확인
+    await expect(ui.viewTypeToggle(page)).toBeVisible();
+
+    // 카드 보기로 변경
+    await changeViewType(page, 'card');
+
+    // localStorage에 저장되는지 확인
+    const viewType = await getLocalStorage(page, 'homeViewType');
+    expect(viewType).toBe('card');
   });
 });

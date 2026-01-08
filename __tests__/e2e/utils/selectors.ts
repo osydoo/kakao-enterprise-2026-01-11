@@ -19,15 +19,17 @@ function firstMatch(...locators: Locator[]) {
 export const ui = {
   // 레이아웃
   gnb: (page: Page) => page.getByRole('banner'),
-  lnb: (page: Page) => page.getByRole('complementary').getByRole('navigation'),
+  // `01-layout` 테스트에서 position을 검사하므로 fixed 요소(aside)를 반환
+  lnb: (page: Page) => page.getByRole('complementary'),
   contentArea: (page: Page) => page.getByRole('main'),
 
   // LNB 메뉴
-  lnbHome: (page: Page) => ui.lnb(page).getByRole('link', { name: '홈' }),
-  lnbBoard: (page: Page) => ui.lnb(page).getByRole('link', { name: '서비스게시판' }),
-  lnbBoardSubmenuToggle: (page: Page) => ui.lnb(page).getByRole('button', { name: '서비스게시판 하위 메뉴 토글' }),
-  lnbBoardSubmenuList: (page: Page) => ui.lnb(page).getByRole('link', { name: '목록' }),
-  lnbBoardSubmenuCreate: (page: Page) => ui.lnb(page).getByRole('link', { name: '글 등록' }),
+  lnbHome: (page: Page) => ui.lnb(page).getByRole('navigation').getByRole('link', { name: '홈' }),
+  lnbBoard: (page: Page) => ui.lnb(page).getByRole('navigation').getByRole('link', { name: '서비스게시판' }),
+  lnbBoardSubmenuToggle: (page: Page) =>
+    ui.lnb(page).getByRole('navigation').getByRole('button', { name: '서비스게시판 하위 메뉴 토글' }),
+  lnbBoardSubmenuList: (page: Page) => ui.lnb(page).getByRole('navigation').getByRole('link', { name: '목록' }),
+  lnbBoardSubmenuCreate: (page: Page) => ui.lnb(page).getByRole('navigation').getByRole('link', { name: '글 등록' }),
 
   // 홈 페이지
   homeImageGrid: (page: Page) => page.getByRole('list', { name: '홈' }),
@@ -50,7 +52,8 @@ export const ui = {
   boardTable: (page: Page) => page.getByRole('table'),
   boardRow: (page: Page) => page.getByRole('row'),
   boardCard: (page: Page) => page.getByRole('article'),
-  boardTitle: (page: Page) => page.getByRole('link'),
+  // LNB 링크가 섞이지 않도록 게시판 목록 섹션으로 범위를 제한
+  boardTitle: (page: Page) => ui.contentArea(page).getByRole('region', { name: '게시글 목록' }).getByRole('link'),
   boardMoreButton: (page: Page) => page.getByRole('button', { name: /더보기|more/i }),
 
   // 더보기 드롭다운/메뉴
