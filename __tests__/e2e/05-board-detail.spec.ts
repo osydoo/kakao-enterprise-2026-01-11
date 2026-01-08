@@ -7,7 +7,7 @@ test.describe.skip('게시글 상세 페이지 테스트', () => {
     await goToBoard(page);
   });
 
-  test('TC-034: 게시글 상세 페이지 기본 표시', async ({ page }) => {
+  test('TC-5-1: 게시글 상세 페이지 기본 표시', async ({ page }) => {
     // 게시글이 있는지 확인
     const boardTitles = page.locator(selectors.boardTitle);
     const count = await boardTitles.count();
@@ -37,7 +37,7 @@ test.describe.skip('게시글 상세 페이지 테스트', () => {
     await expect(moreButton).toBeVisible();
   });
 
-  test('TC-035: 목록 버튼 클릭하여 게시판으로 이동', async ({ page }) => {
+  test('TC-5-2: 목록 버튼 클릭하여 게시판으로 이동', async ({ page }) => {
     // 게시글이 있는지 확인
     const boardTitles = page.locator(selectors.boardTitle);
     const count = await boardTitles.count();
@@ -58,7 +58,7 @@ test.describe.skip('게시글 상세 페이지 테스트', () => {
     await expect(page).toHaveURL(routes.board);
   });
 
-  test('TC-036: 상세 페이지에서 더보기 버튼 동작', async ({ page }) => {
+  test('TC-5-3: 상세 페이지에서 더보기 버튼 동작', async ({ page }) => {
     // 게시글이 있는지 확인
     const boardTitles = page.locator(selectors.boardTitle);
     const count = await boardTitles.count();
@@ -88,7 +88,7 @@ test.describe.skip('게시글 상세 페이지 테스트', () => {
     await expect(deleteOption).toBeVisible();
   });
 
-  test('TC-037: 상세 페이지에서 수정 페이지 이동', async ({ page }) => {
+  test('TC-5-4: 상세 페이지에서 수정 페이지 이동', async ({ page }) => {
     // 게시글이 있는지 확인
     const boardTitles = page.locator(selectors.boardTitle);
     const count = await boardTitles.count();
@@ -126,7 +126,7 @@ test.describe.skip('게시글 상세 페이지 테스트', () => {
     expect(contentValue).toBeTruthy();
   });
 
-  test('TC-038: 상세 페이지에서 삭제 모달 표시', async ({ page }) => {
+  test('TC-5-5: 상세 페이지에서 삭제 모달 표시', async ({ page }) => {
     // 게시글이 있는지 확인
     const boardTitles = page.locator(selectors.boardTitle);
     const count = await boardTitles.count();
@@ -152,7 +152,7 @@ test.describe.skip('게시글 상세 페이지 테스트', () => {
     await expect(deleteModal).toBeVisible();
   });
 
-  test('TC-039: 상세 페이지에서 게시글 삭제 성공', async ({ page }) => {
+  test('TC-5-6: 상세 페이지에서 게시글 삭제 성공', async ({ page }) => {
     // 게시글이 있는지 확인
     const boardTitles = page.locator(selectors.boardTitle);
     const count = await boardTitles.count();

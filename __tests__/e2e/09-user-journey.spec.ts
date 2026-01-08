@@ -19,7 +19,7 @@ import {
 } from './utils/helpers';
 
 test.describe.skip('사용자 여정 테스트 (선택사항)', () => {
-  test('TC-048: 신규 사용자의 첫 방문 및 탐색', async ({ page }) => {
+  test('TC-9-1: 신규 사용자의 첫 방문 및 탐색', async ({ page }) => {
     // 홈 페이지 접속
     await goToHome(page);
 
@@ -63,7 +63,7 @@ test.describe.skip('사용자 여정 테스트 (선택사항)', () => {
     }
   });
 
-  test('TC-049: 일반 사용자의 게시글 검색 및 조회', async ({ page }) => {
+  test('TC-9-2: 일반 사용자의 게시글 검색 및 조회', async ({ page }) => {
     // 서비스 게시판 접속
     await goToBoard(page);
 
@@ -109,7 +109,7 @@ test.describe.skip('사용자 여정 테스트 (선택사항)', () => {
     }
   });
 
-  test('TC-050: 콘텐츠 작성자의 게시글 작성 및 관리', async ({ page }) => {
+  test('TC-9-3: 콘텐츠 작성자의 게시글 작성 및 관리', async ({ page }) => {
     // 서비스 게시판 접속
     await goToBoard(page);
 
@@ -172,7 +172,7 @@ test.describe.skip('사용자 여정 테스트 (선택사항)', () => {
     }
   });
 
-  test('TC-051: 고급 사용자의 복합 기능 사용', async ({ page }) => {
+  test('TC-9-4: 고급 사용자의 복합 기능 사용', async ({ page }) => {
     // 홈 페이지 접속
     await goToHome(page);
 

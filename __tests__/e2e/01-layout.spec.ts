@@ -12,7 +12,7 @@ import {
 } from './utils/helpers';
 
 test.describe.skip('기본 페이지 및 레이아웃 구성', () => {
-  test('TC-001: 기본 레이아웃 요소 표시 확인', async ({ page }) => {
+  test('TC-1-1: 기본 레이아웃 요소 표시 확인', async ({ page }) => {
     // 홈 페이지 접속
     await goToHome(page);
 
@@ -29,7 +29,7 @@ test.describe.skip('기본 페이지 및 레이아웃 구성', () => {
     await expect(contentArea).toBeVisible();
   });
 
-  test('TC-002: LNB 메뉴 아이템 표시 및 활성화 상태', async ({ page }) => {
+  test('TC-1-2: LNB 메뉴 아이템 표시 및 활성화 상태', async ({ page }) => {
     // 홈 페이지 접속
     await goToHome(page);
 
@@ -58,7 +58,7 @@ test.describe.skip('기본 페이지 및 레이아웃 구성', () => {
     await expectActiveMenu(page, 'home');
   });
 
-  test('TC-003: 게시글 상세 페이지에서 LNB 메뉴 활성화 상태', async ({ page }) => {
+  test('TC-1-3: 게시글 상세 페이지에서 LNB 메뉴 활성화 상태', async ({ page }) => {
     // 서비스 게시판 접속
     await goToBoard(page);
 
@@ -77,7 +77,7 @@ test.describe.skip('기본 페이지 및 레이아웃 구성', () => {
     }
   });
 
-  test('TC-004: 게시글 등록/수정 페이지에서 LNB 메뉴 활성화 상태', async ({ page }) => {
+  test('TC-1-4: 게시글 등록/수정 페이지에서 LNB 메뉴 활성화 상태', async ({ page }) => {
     // 서비스 게시판 접속
     await goToBoard(page);
 
@@ -106,7 +106,7 @@ test.describe.skip('기본 페이지 및 레이아웃 구성', () => {
     }
   });
 
-  test('TC-005: 콘텐츠 영역 스크롤 동작', async ({ page }) => {
+  test('TC-1-5: 콘텐츠 영역 스크롤 동작', async ({ page }) => {
     // 서비스 게시판 접속
     await goToBoard(page);
 

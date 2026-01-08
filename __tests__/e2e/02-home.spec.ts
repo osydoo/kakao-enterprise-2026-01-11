@@ -9,7 +9,7 @@ test.describe.skip('홈 페이지 테스트', () => {
     await goToHome(page);
   });
 
-  test('TC-014: 홈 페이지 이미지 레이아웃 (2x2 배열)', async ({ page }) => {
+  test('TC-2-1: 홈 페이지 이미지 레이아웃 (2x2 배열)', async ({ page }) => {
     // 이미지 그리드 확인
     const imageGrid = page.locator(selectors.homeImageGrid);
     await expect(imageGrid).toBeVisible();
@@ -41,7 +41,7 @@ test.describe.skip('홈 페이지 테스트', () => {
     expect(gridWidth).toBeGreaterThan(viewportWidth * 0.8);
   });
 
-  test('TC-015: 홈 페이지 보기 타입 전환 (리스트 → 카드)', async ({ page }) => {
+  test('TC-2-2: 홈 페이지 보기 타입 전환 (리스트 → 카드)', async ({ page }) => {
     // 기본값이 리스트 보기인지 확인
     const imageGrid = page.locator(selectors.homeImageGrid);
     await expect(imageGrid).toBeVisible();
@@ -66,7 +66,7 @@ test.describe.skip('홈 페이지 테스트', () => {
     expect(viewTypeAfterReload).toBe('card');
   });
 
-  test('TC-016: 홈 페이지 보기 타입 전환 (카드 → 리스트)', async ({ page }) => {
+  test('TC-2-3: 홈 페이지 보기 타입 전환 (카드 → 리스트)', async ({ page }) => {
     // 먼저 카드 보기로 전환
     await changeViewType(page, 'card');
     await page.waitForTimeout(300);

@@ -7,7 +7,7 @@ test.describe.skip('모달 관련 테스트', () => {
     await goToBoard(page);
   });
 
-  test('TC-006: 모달 기본 표시 및 백드롭', async ({ page }) => {
+  test('TC-7-1: 모달 기본 표시 및 백드롭', async ({ page }) => {
     // 게시글이 있는지 확인
     const moreButtons = page.locator(selectors.boardMoreButton);
     const count = await moreButtons.count();
@@ -39,7 +39,7 @@ test.describe.skip('모달 관련 테스트', () => {
     expect(backdropOpacity).toBeGreaterThan(0);
   });
 
-  test('TC-007: 백드롭 클릭으로 모달 닫기', async ({ page }) => {
+  test('TC-7-2: 백드롭 클릭으로 모달 닫기', async ({ page }) => {
     // 게시글이 있는지 확인
     const moreButtons = page.locator(selectors.boardMoreButton);
     const count = await moreButtons.count();
@@ -65,7 +65,7 @@ test.describe.skip('모달 관련 테스트', () => {
     await expect(modal).not.toBeVisible();
   });
 
-  test('TC-008: 중첩 모달 표시 및 FILO 방식 닫기', async ({ page }) => {
+  test('TC-7-3: 중첩 모달 표시 및 FILO 방식 닫기', async ({ page }) => {
     // 게시글이 있는지 확인
     const moreButtons = page.locator(selectors.boardMoreButton);
     const count = await moreButtons.count();
@@ -99,7 +99,7 @@ test.describe.skip('모달 관련 테스트', () => {
     await expect(dropdown).not.toBeVisible();
   });
 
-  test('TC-009: 중첩 모달의 백드롭 처리 (선택사항)', async ({ page }) => {
+  test('TC-7-4: 중첩 모달의 백드롭 처리 (선택사항)', async ({ page }) => {
     // 게시글이 있는지 확인
     const moreButtons = page.locator(selectors.boardMoreButton);
     const count = await moreButtons.count();

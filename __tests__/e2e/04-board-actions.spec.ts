@@ -17,7 +17,7 @@ test.describe.skip('서비스 게시판 더보기 버튼 액션 및 UI 타입 �
     await goToBoard(page);
   });
 
-  test('TC-026: 더보기 버튼 클릭 시 드롭다운 메뉴 표시', async ({ page }) => {
+  test('TC-4-1: 더보기 버튼 클릭 시 드롭다운 메뉴 표시', async ({ page }) => {
     // 게시글이 있는지 확인
     const moreButtons = page.locator(selectors.boardMoreButton);
     const count = await moreButtons.count();
@@ -42,7 +42,7 @@ test.describe.skip('서비스 게시판 더보기 버튼 액션 및 UI 타입 �
     await expect(deleteOption).toBeVisible();
   });
 
-  test('TC-027: 더보기 버튼에서 수정 페이지 이동', async ({ page }) => {
+  test('TC-4-2: 더보기 버튼에서 수정 페이지 이동', async ({ page }) => {
     // 게시글이 있는지 확인
     const moreButtons = page.locator(selectors.boardMoreButton);
     const count = await moreButtons.count();
@@ -75,7 +75,7 @@ test.describe.skip('서비스 게시판 더보기 버튼 액션 및 UI 타입 �
     expect(contentValue).toBeTruthy();
   });
 
-  test('TC-028: 더보기 버튼에서 삭제 모달 표시', async ({ page }) => {
+  test('TC-4-3: 더보기 버튼에서 삭제 모달 표시', async ({ page }) => {
     // 게시글이 있는지 확인
     const moreButtons = page.locator(selectors.boardMoreButton);
     const count = await moreButtons.count();
@@ -100,7 +100,7 @@ test.describe.skip('서비스 게시판 더보기 버튼 액션 및 UI 타입 �
     await expect(backdrop).toBeVisible();
   });
 
-  test('TC-029: 게시글 삭제 성공 (게시판에서)', async ({ page }) => {
+  test('TC-4-4: 게시글 삭제 성공 (게시판에서)', async ({ page }) => {
     // 게시글이 있는지 확인
     const moreButtons = page.locator(selectors.boardMoreButton);
     const count = await moreButtons.count();
@@ -138,7 +138,7 @@ test.describe.skip('서비스 게시판 더보기 버튼 액션 및 UI 타입 �
     }
   });
 
-  test('TC-030: 게시글 삭제 취소', async ({ page }) => {
+  test('TC-4-5: 게시글 삭제 취소', async ({ page }) => {
     // 게시글이 있는지 확인
     const moreButtons = page.locator(selectors.boardMoreButton);
     const count = await moreButtons.count();
@@ -175,7 +175,7 @@ test.describe.skip('서비스 게시판 더보기 버튼 액션 및 UI 타입 �
     }
   });
 
-  test('TC-031: 리스트 보기에서 카드 보기로 전환', async ({ page }) => {
+  test('TC-4-6: 리스트 보기에서 카드 보기로 전환', async ({ page }) => {
     // localStorage 초기화
     await clearLocalStorage(page);
 
@@ -209,7 +209,7 @@ test.describe.skip('서비스 게시판 더보기 버튼 액션 및 UI 타입 �
     await expect(boardCardsAfterReload.first()).toBeVisible();
   });
 
-  test('TC-032: 카드 보기에서 리스트 보기로 전환', async ({ page }) => {
+  test('TC-4-7: 카드 보기에서 리스트 보기로 전환', async ({ page }) => {
     // 먼저 카드 보기로 전환
     await changeViewType(page, 'card');
     await page.waitForTimeout(300);
@@ -222,7 +222,7 @@ test.describe.skip('서비스 게시판 더보기 버튼 액션 및 UI 타입 �
     await expect(boardTable).toBeVisible();
   });
 
-  test('TC-033: 카드 보기에서 더보기 버튼 동작', async ({ page }) => {
+  test('TC-4-8: 카드 보기에서 더보기 버튼 동작', async ({ page }) => {
     // 카드 보기로 전환
     await changeViewType(page, 'card');
     await page.waitForTimeout(300);

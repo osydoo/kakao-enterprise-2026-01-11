@@ -14,7 +14,7 @@ test.describe.skip('게시글 등록 및 수정 테스트', () => {
     await goToBoard(page);
   });
 
-  test('TC-040: 게시글 등록 페이지 기본 표시', async ({ page }) => {
+  test('TC-6-1: 게시글 등록 페이지 기본 표시', async ({ page }) => {
     // 등록 버튼 클릭하여 등록 페이지로 이동
     await goToBoardCreate(page);
 
@@ -31,7 +31,7 @@ test.describe.skip('게시글 등록 및 수정 테스트', () => {
     await expect(formSubmit).toBeVisible();
   });
 
-  test('TC-041: 게시글 등록 - 유효성 검사 (제목 빈 값)', async ({ page }) => {
+  test('TC-6-2: 게시글 등록 - 유효성 검사 (제목 빈 값)', async ({ page }) => {
     // 등록 페이지로 이동
     await goToBoardCreate(page);
 
@@ -57,7 +57,7 @@ test.describe.skip('게시글 등록 및 수정 테스트', () => {
     await expect(page).toHaveURL(routes.boardCreate);
   });
 
-  test('TC-042: 게시글 등록 - 유효성 검사 (내용 빈 값)', async ({ page }) => {
+  test('TC-6-3: 게시글 등록 - 유효성 검사 (내용 빈 값)', async ({ page }) => {
     // 등록 페이지로 이동
     await goToBoardCreate(page);
 
@@ -83,7 +83,7 @@ test.describe.skip('게시글 등록 및 수정 테스트', () => {
     await expect(page).toHaveURL(routes.boardCreate);
   });
 
-  test('TC-043: 게시글 등록 - 유효성 검사 (모두 빈 값)', async ({ page }) => {
+  test('TC-6-4: 게시글 등록 - 유효성 검사 (모두 빈 값)', async ({ page }) => {
     // 등록 페이지로 이동
     await goToBoardCreate(page);
 
@@ -109,7 +109,7 @@ test.describe.skip('게시글 등록 및 수정 테스트', () => {
     await expect(page).toHaveURL(routes.boardCreate);
   });
 
-  test('TC-044: 게시글 등록 성공', async ({ page }) => {
+  test('TC-6-5: 게시글 등록 성공', async ({ page }) => {
     // 등록 페이지로 이동
     await goToBoardCreate(page);
 
@@ -144,7 +144,7 @@ test.describe.skip('게시글 등록 및 수정 테스트', () => {
     }
   });
 
-  test('TC-045: 게시글 수정 페이지 기본 표시', async ({ page }) => {
+  test('TC-6-6: 게시글 수정 페이지 기본 표시', async ({ page }) => {
     // 게시글이 있는지 확인
     const moreButtons = page.locator(selectors.boardMoreButton);
     const count = await moreButtons.count();
@@ -185,7 +185,7 @@ test.describe.skip('게시글 등록 및 수정 테스트', () => {
     await expect(formSubmit).toBeVisible();
   });
 
-  test('TC-046: 게시글 수정 성공', async ({ page }) => {
+  test('TC-6-7: 게시글 수정 성공', async ({ page }) => {
     // 게시글이 있는지 확인
     const moreButtons = page.locator(selectors.boardMoreButton);
     const count = await moreButtons.count();
@@ -235,7 +235,7 @@ test.describe.skip('게시글 등록 및 수정 테스트', () => {
     }
   });
 
-  test('TC-047: 게시글 수정 - 유효성 검사', async ({ page }) => {
+  test('TC-6-8: 게시글 수정 - 유효성 검사', async ({ page }) => {
     // 게시글이 있는지 확인
     const moreButtons = page.locator(selectors.boardMoreButton);
     const count = await moreButtons.count();

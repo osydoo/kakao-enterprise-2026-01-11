@@ -7,7 +7,7 @@ test.describe.skip('페이징 기능 테스트', () => {
     await goToBoard(page);
   });
 
-  test('TC-010: 페이징 기본 동작 (7페이지 이하)', async ({ page }) => {
+  test('TC-8-1: 페이징 기본 동작 (7페이지 이하)', async ({ page }) => {
     // 페이징이 있는지 확인
     const pagination = page.locator(selectors.pagination);
     const paginationVisible = await pagination.isVisible().catch(() => false);
@@ -43,7 +43,7 @@ test.describe.skip('페이징 기능 테스트', () => {
     }
   });
 
-  test('TC-011: 페이징 동작 (8페이지 이상 - 앞쪽)', async ({ page }) => {
+  test('TC-8-2: 페이징 동작 (8페이지 이상 - 앞쪽)', async ({ page }) => {
     // 페이징이 있는지 확인
     const pagination = page.locator(selectors.pagination);
     const paginationVisible = await pagination.isVisible().catch(() => false);
@@ -87,7 +87,7 @@ test.describe.skip('페이징 기능 테스트', () => {
     }
   });
 
-  test('TC-012: 페이징 동작 (8페이지 이상 - 뒤쪽)', async ({ page }) => {
+  test('TC-8-3: 페이징 동작 (8페이지 이상 - 뒤쪽)', async ({ page }) => {
     // 페이징이 있는지 확인
     const pagination = page.locator(selectors.pagination);
     const paginationVisible = await pagination.isVisible().catch(() => false);
@@ -136,7 +136,7 @@ test.describe.skip('페이징 기능 테스트', () => {
     }
   });
 
-  test('TC-013: 페이징 동작 (중간 페이지)', async ({ page }) => {
+  test('TC-8-4: 페이징 동작 (중간 페이지)', async ({ page }) => {
     // 페이징이 있는지 확인
     const pagination = page.locator(selectors.pagination);
     const paginationVisible = await pagination.isVisible().catch(() => false);
