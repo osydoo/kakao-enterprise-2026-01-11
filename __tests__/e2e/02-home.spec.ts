@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { selectors } from './utils/selectors';
+import { ui } from './utils/selectors';
 import { goToHome, changeViewType, getLocalStorage, clearLocalStorage } from './utils/helpers';
 
 test.describe.skip('홈 페이지 테스트', () => {
@@ -11,11 +11,11 @@ test.describe.skip('홈 페이지 테스트', () => {
 
   test('TC-2-1: 홈 페이지 이미지 레이아웃 (2x2 배열)', async ({ page }) => {
     // 이미지 그리드 확인
-    const imageGrid = page.locator(selectors.homeImageGrid);
+    const imageGrid = ui.homeImageGrid(page);
     await expect(imageGrid).toBeVisible();
 
     // 이미지 아이템 확인
-    const imageItems = page.locator(selectors.homeImageItem);
+    const imageItems = ui.homeImageItem(page);
     const imageCount = await imageItems.count();
 
     // 정확히 4개인지 확인 (2x2)
@@ -43,7 +43,7 @@ test.describe.skip('홈 페이지 테스트', () => {
 
   test('TC-2-2: 홈 페이지 보기 타입 전환 (리스트 → 카드)', async ({ page }) => {
     // 기본값이 리스트 보기인지 확인
-    const imageGrid = page.locator(selectors.homeImageGrid);
+    const imageGrid = ui.homeImageGrid(page);
     await expect(imageGrid).toBeVisible();
 
     // 보기 타입 전환 버튼 클릭
@@ -51,7 +51,7 @@ test.describe.skip('홈 페이지 테스트', () => {
 
     // 카드 형태로 변경되었는지 확인
     // 실제 구현에 따라 셀렉터가 다를 수 있음
-    const imageGridAfter = page.locator(selectors.homeImageGrid);
+    const imageGridAfter = ui.homeImageGrid(page);
     await expect(imageGridAfter).toBeVisible();
 
     // localStorage에 설정이 저장되었는지 확인
@@ -75,7 +75,7 @@ test.describe.skip('홈 페이지 테스트', () => {
     await changeViewType(page, 'list');
 
     // 리스트 형태로 변경되었는지 확인
-    const imageGrid = page.locator(selectors.homeImageGrid);
+    const imageGrid = ui.homeImageGrid(page);
     await expect(imageGrid).toBeVisible();
 
     // localStorage에 설정이 저장되었는지 확인

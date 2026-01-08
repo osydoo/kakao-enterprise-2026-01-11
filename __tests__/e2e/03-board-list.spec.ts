@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { selectors, routes } from './utils/selectors';
+import { routes, ui } from './utils/selectors';
 import { goToBoard, searchBoard, clickBoardTitle, goToBoardCreate, getBoardCount } from './utils/helpers';
 
 test.describe.skip('서비스 게시판 기본 기능 및 예외 처리', () => {
@@ -9,23 +9,23 @@ test.describe.skip('서비스 게시판 기본 기능 및 예외 처리', () => 
 
   test('TC-3-1: 서비스 게시판 기본 화면 확인', async ({ page }) => {
     // 검색 입력 필드 확인
-    const searchInput = page.locator(selectors.searchInput);
+    const searchInput = ui.searchInput(page);
     await expect(searchInput).toBeVisible();
 
     // 검색 버튼 확인
-    const searchButton = page.locator(selectors.searchButton);
+    const searchButton = ui.searchButton(page);
     await expect(searchButton).toBeVisible();
 
     // 등록 버튼 확인
-    const registerButton = page.locator(selectors.registerButton);
+    const registerButton = ui.registerButton(page);
     await expect(registerButton).toBeVisible();
 
     // 게시글 테이블 확인
-    const boardTable = page.locator(selectors.boardTable);
+    const boardTable = ui.boardTable(page);
     await expect(boardTable).toBeVisible();
 
     // 서비스게시판 메뉴가 활성화 상태인지 확인
-    const boardMenu = page.locator(selectors.lnbBoard);
+    const boardMenu = ui.lnbBoard(page);
     await expect(boardMenu).toHaveAttribute('aria-current', 'page');
   });
 
@@ -35,7 +35,7 @@ test.describe.skip('서비스 게시판 기본 기능 및 예외 처리', () => 
     await searchBoard(page, searchKeyword, 'enter');
 
     // 검색 결과 확인
-    const boardTitles = page.locator(selectors.boardTitle);
+    const boardTitles = ui.boardTitle(page);
     const count = await boardTitles.count();
 
     // 검색 결과가 있는 경우, 검색어가 포함되어 있는지 확인
@@ -53,7 +53,7 @@ test.describe.skip('서비스 게시판 기본 기능 및 예외 처리', () => 
     await searchBoard(page, searchKeyword, 'button');
 
     // 검색 결과 확인
-    const boardTitles = page.locator(selectors.boardTitle);
+    const boardTitles = ui.boardTitle(page);
     const count = await boardTitles.count();
 
     // 검색 결과가 있는 경우, 검색어가 포함되어 있는지 확인
@@ -67,7 +67,7 @@ test.describe.skip('서비스 게시판 기본 기능 및 예외 처리', () => 
 
   test('TC-3-4: 게시글 목록 클릭하여 상세 페이지 이동', async ({ page }) => {
     // 게시글이 있는지 확인
-    const boardTitles = page.locator(selectors.boardTitle);
+    const boardTitles = ui.boardTitle(page);
     const count = await boardTitles.count();
 
     if (count > 0) {
@@ -78,14 +78,14 @@ test.describe.skip('서비스 게시판 기본 기능 및 예외 처리', () => 
       await expect(page).toHaveURL(/\/board\/\d+/);
 
       // 게시글 제목과 내용이 표시되는지 확인
-      const detailTitle = page.locator(selectors.detailTitle);
-      const detailContent = page.locator(selectors.detailContent);
+      const detailTitle = ui.detailTitle(page);
+      const detailContent = ui.detailContent(page);
 
       await expect(detailTitle).toBeVisible();
       await expect(detailContent).toBeVisible();
 
       // 서비스게시판 메뉴가 활성화 상태로 유지되는지 확인
-      const boardMenu = page.locator(selectors.lnbBoard);
+      const boardMenu = ui.lnbBoard(page);
       await expect(boardMenu).toHaveAttribute('aria-current', 'page');
     } else {
       test.skip();
@@ -100,7 +100,7 @@ test.describe.skip('서비스 게시판 기본 기능 및 예외 처리', () => 
     await expect(page).toHaveURL(routes.boardCreate);
 
     // 서비스게시판 메뉴가 활성화 상태로 유지되는지 확인
-    const boardMenu = page.locator(selectors.lnbBoard);
+    const boardMenu = ui.lnbBoard(page);
     await expect(boardMenu).toHaveAttribute('aria-current', 'page');
   });
 
@@ -113,7 +113,7 @@ test.describe.skip('서비스 게시판 기본 기능 및 예외 처리', () => 
 
     // 10개 이상인 경우 페이징이 표시되는지 확인
     if (boardCount === 10) {
-      const pagination = page.locator(selectors.pagination);
+      const pagination = ui.pagination(page);
       const paginationVisible = await pagination.isVisible().catch(() => false);
 
       console.log('paginationVisible', paginationVisible);
@@ -126,7 +126,7 @@ test.describe.skip('서비스 게시판 기본 기능 및 예외 처리', () => 
     // 모든 게시글 삭제 (실제로는 테스트 데이터를 초기화하거나 빈 상태를 확인)
     // 여기서는 빈 상태 메시지가 표시되는지만 확인
 
-    const emptyMessage = page.locator(selectors.emptyMessage);
+    const emptyMessage = ui.emptyMessage(page);
     const emptyMessageVisible = await emptyMessage.isVisible().catch(() => false);
 
     const boardCount = await getBoardCount(page, 'list');
@@ -155,7 +155,7 @@ test.describe.skip('서비스 게시판 기본 기능 및 예외 처리', () => 
     await page.reload();
 
     // 로딩 인디케이터가 표시되는지 확인
-    const loadingIndicator = page.locator(selectors.loadingIndicator);
+    const loadingIndicator = ui.loadingIndicator(page);
     const loadingVisible = await loadingIndicator.isVisible().catch(() => false);
 
     console.log('loadingVisible', loadingVisible);
@@ -176,7 +176,7 @@ test.describe.skip('서비스 게시판 기본 기능 및 예외 처리', () => 
     await page.reload().catch(() => {});
 
     // 에러 메시지가 표시되는지 확인
-    const errorMessage = page.locator(selectors.errorMessage);
+    const errorMessage = ui.errorMessage(page);
     const errorVisible = await errorMessage.isVisible().catch(() => false);
 
     // 에러 상태가 표시될 수 있음 (구현된 경우)

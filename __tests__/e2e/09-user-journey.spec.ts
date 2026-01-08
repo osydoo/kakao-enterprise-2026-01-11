@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { selectors, routes } from './utils/selectors';
+import { routes, ui } from './utils/selectors';
 import {
   goToHome,
   goToBoard,
@@ -24,16 +24,16 @@ test.describe.skip('사용자 여정 테스트 (선택사항)', () => {
     await goToHome(page);
 
     // 기본 레이아웃 확인
-    const gnb = page.locator(selectors.gnb);
-    const lnb = page.locator(selectors.lnb);
-    const contentArea = page.locator(selectors.contentArea);
+    const gnb = ui.gnb(page);
+    const lnb = ui.lnb(page);
+    const contentArea = ui.contentArea(page);
 
     await expect(gnb).toBeVisible();
     await expect(lnb).toBeVisible();
     await expect(contentArea).toBeVisible();
 
     // 이미지가 2x2 배열로 표시되는지 확인
-    const imageItems = page.locator(selectors.homeImageItem);
+    const imageItems = ui.homeImageItem(page);
     const imageCount = await imageItems.count();
     expect(imageCount).toBe(4);
 
@@ -42,22 +42,22 @@ test.describe.skip('사용자 여정 테스트 (선택사항)', () => {
     await expect(page).toHaveURL(routes.board);
 
     // 게시글 목록 확인
-    const boardTable = page.locator(selectors.boardTable);
+    const boardTable = ui.boardTable(page);
     await expect(boardTable).toBeVisible();
 
     // 게시글이 있으면 첫 번째 게시글 클릭
-    const boardTitles = page.locator(selectors.boardTitle);
+    const boardTitles = ui.boardTitle(page);
     const count = await boardTitles.count();
 
     if (count > 0) {
       await clickBoardTitle(page, 0);
 
       // 상세 페이지 확인
-      const detailTitle = page.locator(selectors.detailTitle);
+      const detailTitle = ui.detailTitle(page);
       await expect(detailTitle).toBeVisible();
 
       // 목록 버튼 클릭하여 게시판으로 돌아가기
-      const listButton = page.locator(selectors.detailListButton);
+      const listButton = ui.detailListButton(page);
       await listButton.click();
       await expect(page).toHaveURL(routes.board);
     }
@@ -71,7 +71,7 @@ test.describe.skip('사용자 여정 테스트 (선택사항)', () => {
     await searchBoard(page, '테스트', 'enter');
 
     // 검색 결과 확인
-    const boardTitles = page.locator(selectors.boardTitle);
+    const boardTitles = ui.boardTitle(page);
     const count = await boardTitles.count();
 
     if (count > 0) {
@@ -79,20 +79,20 @@ test.describe.skip('사용자 여정 테스트 (선택사항)', () => {
       await clickBoardTitle(page, 0);
 
       // 게시글 내용 확인
-      const detailContent = page.locator(selectors.detailContent);
+      const detailContent = ui.detailContent(page);
       await expect(detailContent).toBeVisible();
 
       // 목록 버튼 클릭하여 게시판으로 돌아가기
-      const listButton = page.locator(selectors.detailListButton);
+      const listButton = ui.detailListButton(page);
       await listButton.click();
       await expect(page).toHaveURL(routes.board);
 
       // 페이징이 있으면 다음 페이지로 이동
-      const pagination = page.locator(selectors.pagination);
+      const pagination = ui.pagination(page);
       const paginationVisible = await pagination.isVisible().catch(() => false);
 
       if (paginationVisible) {
-        const nextButton = page.locator(selectors.paginationNext);
+        const nextButton = ui.paginationNext(page);
         const nextButtonVisible = await nextButton.isVisible().catch(() => false);
 
         if (nextButtonVisible) {
@@ -104,7 +104,7 @@ test.describe.skip('사용자 여정 테스트 (선택사항)', () => {
       await changeViewType(page, 'card');
 
       // 카드 형태로 게시글이 표시되는지 확인
-      const boardCards = page.locator(selectors.boardCard);
+      const boardCards = ui.boardCard(page);
       await expect(boardCards.first()).toBeVisible();
     }
   });
@@ -128,7 +128,7 @@ test.describe.skip('사용자 여정 테스트 (선택사항)', () => {
     // 게시판으로 이동하고 등록한 게시글이 목록에 표시되는지 확인
     await expect(page).toHaveURL(routes.board);
 
-    const boardTitles = page.locator(selectors.boardTitle);
+    const boardTitles = ui.boardTitle(page);
     const titlesText = await boardTitles.allTextContents();
     expect(titlesText).toContain(testTitle);
 
@@ -151,7 +151,7 @@ test.describe.skip('사용자 여정 테스트 (선택사항)', () => {
       await expect(page).toHaveURL(routes.board);
 
       // 다시 더보기 버튼 클릭하여 삭제
-      const titlesAfterUpdate = page.locator(selectors.boardTitle);
+      const titlesAfterUpdate = ui.boardTitle(page);
       const titlesAfterUpdateText = await titlesAfterUpdate.allTextContents();
       const updatedTitleIndex = titlesAfterUpdateText.indexOf(testTitle);
 
@@ -165,7 +165,7 @@ test.describe.skip('사용자 여정 테스트 (선택사항)', () => {
         // 게시글이 삭제되었는지 확인
         await expect(page).toHaveURL(routes.board);
 
-        const titlesAfterDelete = page.locator(selectors.boardTitle);
+        const titlesAfterDelete = ui.boardTitle(page);
         const titlesAfterDeleteText = await titlesAfterDelete.allTextContents();
         expect(titlesAfterDeleteText).not.toContain(testTitle);
       }
@@ -187,14 +187,14 @@ test.describe.skip('사용자 여정 테스트 (선택사항)', () => {
     await searchBoard(page, '테스트', 'enter');
 
     // 검색 결과 중 하나 클릭하여 상세 페이지로 이동
-    const boardTitles = page.locator(selectors.boardTitle);
+    const boardTitles = ui.boardTitle(page);
     const count = await boardTitles.count();
 
     if (count > 0) {
       await clickBoardTitle(page, 0);
 
       // 상세 페이지에서 더보기 버튼 클릭
-      const moreButton = page.locator(selectors.detailMoreButton);
+      const moreButton = ui.detailMoreButton(page);
       await moreButton.click();
       await page.waitForTimeout(200);
 
@@ -205,16 +205,16 @@ test.describe.skip('사용자 여정 테스트 (선택사항)', () => {
       await cancelDelete(page);
 
       // 목록 버튼 클릭하여 게시판으로 돌아가기
-      const listButton = page.locator(selectors.detailListButton);
+      const listButton = ui.detailListButton(page);
       await listButton.click();
       await expect(page).toHaveURL(routes.board);
 
       // 페이징을 통해 여러 페이지 탐색
-      const pagination = page.locator(selectors.pagination);
+      const pagination = ui.pagination(page);
       const paginationVisible = await pagination.isVisible().catch(() => false);
 
       if (paginationVisible) {
-        const nextButton = page.locator(selectors.paginationNext);
+        const nextButton = ui.paginationNext(page);
         const nextButtonVisible = await nextButton.isVisible().catch(() => false);
 
         if (nextButtonVisible) {
@@ -223,7 +223,7 @@ test.describe.skip('사용자 여정 테스트 (선택사항)', () => {
       }
 
       // 게시글의 더보기 버튼 클릭하여 드롭다운 열기
-      const moreButtons = page.locator(selectors.boardMoreButton);
+      const moreButtons = ui.boardMoreButton(page);
       const moreButtonCount = await moreButtons.count();
 
       if (moreButtonCount > 0) {
@@ -236,7 +236,7 @@ test.describe.skip('사용자 여정 테스트 (선택사항)', () => {
         await cancelDelete(page);
 
         // 드롭다운만 남아있는지 확인 (FILO 방식)
-        const dropdown = page.locator(selectors.moreDropdown);
+        const dropdown = ui.moreDropdown(page);
         await expect(dropdown).toBeVisible();
 
         // 드롭다운도 닫기

@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { selectors, routes } from './utils/selectors';
+import { routes, ui } from './utils/selectors';
 import {
   goToHome,
   goToBoard,
@@ -17,15 +17,15 @@ test.describe.skip('기본 페이지 및 레이아웃 구성', () => {
     await goToHome(page);
 
     // GNB 확인
-    const gnb = page.locator(selectors.gnb);
+    const gnb = ui.gnb(page);
     await expect(gnb).toBeVisible();
 
     // LNB 확인
-    const lnb = page.locator(selectors.lnb);
+    const lnb = ui.lnb(page);
     await expect(lnb).toBeVisible();
 
     // 콘텐츠 영역 확인
-    const contentArea = page.locator(selectors.contentArea);
+    const contentArea = ui.contentArea(page);
     await expect(contentArea).toBeVisible();
   });
 
@@ -34,8 +34,8 @@ test.describe.skip('기본 페이지 및 레이아웃 구성', () => {
     await goToHome(page);
 
     // LNB 메뉴 아이템 확인
-    const homeMenu = page.locator(selectors.lnbHome);
-    const boardMenu = page.locator(selectors.lnbBoard);
+    const homeMenu = ui.lnbHome(page);
+    const boardMenu = ui.lnbBoard(page);
 
     await expect(homeMenu).toBeVisible();
     await expect(boardMenu).toBeVisible();
@@ -63,7 +63,7 @@ test.describe.skip('기본 페이지 및 레이아웃 구성', () => {
     await goToBoard(page);
 
     // 게시글이 있는지 확인
-    const boardTitles = page.locator(selectors.boardTitle);
+    const boardTitles = ui.boardTitle(page);
     const count = await boardTitles.count();
 
     if (count > 0) {
@@ -91,7 +91,7 @@ test.describe.skip('기본 페이지 및 레이아웃 구성', () => {
     await goToBoard(page);
 
     // 게시글이 있는지 확인
-    const moreButtons = page.locator(selectors.boardMoreButton);
+    const moreButtons = ui.boardMoreButton(page);
     const count = await moreButtons.count();
 
     if (count > 0) {
@@ -111,12 +111,12 @@ test.describe.skip('기본 페이지 및 레이아웃 구성', () => {
     await goToBoard(page);
 
     // 콘텐츠 영역 확인
-    const contentArea = page.locator(selectors.contentArea);
+    const contentArea = ui.contentArea(page);
     await expect(contentArea).toBeVisible();
 
     // GNB와 LNB가 고정되어 있는지 확인 (position: fixed 또는 sticky)
-    const gnb = page.locator(selectors.gnb);
-    const lnb = page.locator(selectors.lnb);
+    const gnb = ui.gnb(page);
+    const lnb = ui.lnb(page);
 
     const gnbPosition = await gnb.evaluate((el) => {
       const style = window.getComputedStyle(el);

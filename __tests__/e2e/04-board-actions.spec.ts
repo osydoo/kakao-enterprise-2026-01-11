@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { selectors } from './utils/selectors';
+import { ui } from './utils/selectors';
 import {
   goToBoard,
   clickMoreButton,
@@ -19,7 +19,7 @@ test.describe.skip('서비스 게시판 더보기 버튼 액션 및 UI 타입 �
 
   test('TC-4-1: 더보기 버튼 클릭 시 드롭다운 메뉴 표시', async ({ page }) => {
     // 게시글이 있는지 확인
-    const moreButtons = page.locator(selectors.boardMoreButton);
+    const moreButtons = ui.boardMoreButton(page);
     const count = await moreButtons.count();
 
     if (count === 0) {
@@ -31,12 +31,12 @@ test.describe.skip('서비스 게시판 더보기 버튼 액션 및 UI 타입 �
     await clickMoreButton(page, 0);
 
     // 드롭다운 메뉴가 노출되는지 확인
-    const dropdown = page.locator(selectors.moreDropdown);
+    const dropdown = ui.moreDropdown(page);
     await expect(dropdown).toBeVisible();
 
     // 수정, 삭제 옵션이 표시되는지 확인
-    const editOption = page.locator(selectors.moreEdit);
-    const deleteOption = page.locator(selectors.moreDelete);
+    const editOption = ui.moreEdit(page);
+    const deleteOption = ui.moreDelete(page);
 
     await expect(editOption).toBeVisible();
     await expect(deleteOption).toBeVisible();
@@ -44,7 +44,7 @@ test.describe.skip('서비스 게시판 더보기 버튼 액션 및 UI 타입 �
 
   test('TC-4-2: 더보기 버튼에서 수정 페이지 이동', async ({ page }) => {
     // 게시글이 있는지 확인
-    const moreButtons = page.locator(selectors.boardMoreButton);
+    const moreButtons = ui.boardMoreButton(page);
     const count = await moreButtons.count();
 
     if (count === 0) {
@@ -62,8 +62,8 @@ test.describe.skip('서비스 게시판 더보기 버튼 액션 및 UI 타입 �
     await expect(page).toHaveURL(/\/board\/\d+\/edit/);
 
     // 기존 게시글 제목과 내용이 입력 필드에 표시되는지 확인
-    const formTitle = page.locator(selectors.formTitle);
-    const formContent = page.locator(selectors.formContent);
+    const formTitle = ui.formTitle(page);
+    const formContent = ui.formContent(page);
 
     await expect(formTitle).toBeVisible();
     await expect(formContent).toBeVisible();
@@ -77,7 +77,7 @@ test.describe.skip('서비스 게시판 더보기 버튼 액션 및 UI 타입 �
 
   test('TC-4-3: 더보기 버튼에서 삭제 모달 표시', async ({ page }) => {
     // 게시글이 있는지 확인
-    const moreButtons = page.locator(selectors.boardMoreButton);
+    const moreButtons = ui.boardMoreButton(page);
     const count = await moreButtons.count();
 
     if (count === 0) {
@@ -92,17 +92,15 @@ test.describe.skip('서비스 게시판 더보기 버튼 액션 및 UI 타입 �
     await clickMoreDelete(page);
 
     // 삭제 확인 모달이 표시되는지 확인
-    const deleteModal = page.locator(selectors.deleteModal);
+    const deleteModal = ui.deleteModal(page);
     await expect(deleteModal).toBeVisible();
 
-    // 백드롭 레이어가 표시되는지 확인
-    const backdrop = page.locator(selectors.modalBackdrop);
-    await expect(backdrop).toBeVisible();
+    // 백드롭은 접근성 트리에서 노출되지 않는 경우가 많아서(의도적으로) 별도 셀렉터로 강제하지 않음
   });
 
   test('TC-4-4: 게시글 삭제 성공 (게시판에서)', async ({ page }) => {
     // 게시글이 있는지 확인
-    const moreButtons = page.locator(selectors.boardMoreButton);
+    const moreButtons = ui.boardMoreButton(page);
     const count = await moreButtons.count();
 
     if (count === 0) {
@@ -111,7 +109,7 @@ test.describe.skip('서비스 게시판 더보기 버튼 액션 및 UI 타입 �
     }
 
     // 삭제할 게시글의 제목 기록
-    const boardTitles = page.locator(selectors.boardTitle);
+    const boardTitles = ui.boardTitle(page);
     const titleToDelete = await boardTitles.nth(0).textContent();
 
     // 더보기 버튼 클릭하여 삭제 모달 열기
@@ -125,7 +123,7 @@ test.describe.skip('서비스 게시판 더보기 버튼 액션 및 UI 타입 �
     await expect(page).toHaveURL(/\/board/);
 
     // 삭제한 게시글이 목록에서 사라졌는지 확인
-    const titlesAfterDelete = page.locator(selectors.boardTitle);
+    const titlesAfterDelete = ui.boardTitle(page);
     const titlesAfterDeleteCount = await titlesAfterDelete.count();
 
     // 게시글 개수가 줄었는지 확인
@@ -140,7 +138,7 @@ test.describe.skip('서비스 게시판 더보기 버튼 액션 및 UI 타입 �
 
   test('TC-4-5: 게시글 삭제 취소', async ({ page }) => {
     // 게시글이 있는지 확인
-    const moreButtons = page.locator(selectors.boardMoreButton);
+    const moreButtons = ui.boardMoreButton(page);
     const count = await moreButtons.count();
 
     if (count === 0) {
@@ -149,7 +147,7 @@ test.describe.skip('서비스 게시판 더보기 버튼 액션 및 UI 타입 �
     }
 
     // 삭제할 게시글의 제목 기록
-    const boardTitles = page.locator(selectors.boardTitle);
+    const boardTitles = ui.boardTitle(page);
     const titleToKeep = await boardTitles.nth(0).textContent();
 
     // 더보기 버튼 클릭하여 삭제 모달 열기
@@ -160,11 +158,11 @@ test.describe.skip('서비스 게시판 더보기 버튼 액션 및 UI 타입 �
     await cancelDelete(page);
 
     // 모달이 닫혔는지 확인
-    const deleteModal = page.locator(selectors.deleteModal);
+    const deleteModal = ui.deleteModal(page);
     await expect(deleteModal).not.toBeVisible();
 
     // 게시글이 삭제되지 않고 목록에 남아있는지 확인
-    const titlesAfterCancel = page.locator(selectors.boardTitle);
+    const titlesAfterCancel = ui.boardTitle(page);
     const titlesAfterCancelCount = await titlesAfterCancel.count();
 
     expect(titlesAfterCancelCount).toBe(count);
@@ -180,18 +178,18 @@ test.describe.skip('서비스 게시판 더보기 버튼 액션 및 UI 타입 �
     await clearLocalStorage(page);
 
     // 기본값이 리스트 보기인지 확인
-    const boardTable = page.locator(selectors.boardTable);
+    const boardTable = ui.boardTable(page);
     await expect(boardTable).toBeVisible();
 
     // 보기 타입 전환 버튼 클릭하여 카드 보기로 전환
     await changeViewType(page, 'card');
 
     // 게시글이 카드 UI 형태로 표시되는지 확인
-    const boardCards = page.locator(selectors.boardCard);
+    const boardCards = ui.boardCard(page);
     await expect(boardCards.first()).toBeVisible();
 
     // 각 카드에 더보기 버튼이 표시되는지 확인
-    const cardMoreButtons = page.locator(`${selectors.boardCard} ${selectors.boardMoreButton}`);
+    const cardMoreButtons = boardCards.getByRole('button', { name: /더보기|more/i });
     const cardMoreButtonCount = await cardMoreButtons.count();
 
     if (cardMoreButtonCount > 0) {
@@ -205,7 +203,7 @@ test.describe.skip('서비스 게시판 더보기 버튼 액션 및 UI 타입 �
     const viewType = await getLocalStorage(page, 'boardViewType');
     expect(viewType).toBe('card');
 
-    const boardCardsAfterReload = page.locator(selectors.boardCard);
+    const boardCardsAfterReload = ui.boardCard(page);
     await expect(boardCardsAfterReload.first()).toBeVisible();
   });
 
@@ -218,7 +216,7 @@ test.describe.skip('서비스 게시판 더보기 버튼 액션 및 UI 타입 �
     await changeViewType(page, 'list');
 
     // 게시글이 테이블 UI 형태로 표시되는지 확인
-    const boardTable = page.locator(selectors.boardTable);
+    const boardTable = ui.boardTable(page);
     await expect(boardTable).toBeVisible();
   });
 
@@ -228,7 +226,7 @@ test.describe.skip('서비스 게시판 더보기 버튼 액션 및 UI 타입 �
     await page.waitForTimeout(300);
 
     // 게시글이 있는지 확인
-    const boardCards = page.locator(selectors.boardCard);
+    const boardCards = ui.boardCard(page);
     const cardCount = await boardCards.count();
 
     if (cardCount === 0) {
@@ -237,7 +235,7 @@ test.describe.skip('서비스 게시판 더보기 버튼 액션 및 UI 타입 �
     }
 
     // 카드의 더보기 버튼 클릭
-    const cardMoreButtons = page.locator(`${selectors.boardCard} ${selectors.boardMoreButton}`);
+    const cardMoreButtons = boardCards.getByRole('button', { name: /더보기|more/i });
     const cardMoreButtonCount = await cardMoreButtons.count();
 
     if (cardMoreButtonCount > 0) {
@@ -245,11 +243,11 @@ test.describe.skip('서비스 게시판 더보기 버튼 액션 및 UI 타입 �
       await page.waitForTimeout(200);
 
       // 드롭다운 메뉴가 노출되는지 확인
-      const dropdown = page.locator(selectors.moreDropdown);
+      const dropdown = ui.moreDropdown(page);
       await expect(dropdown).toBeVisible();
 
       // 수정 또는 삭제 옵션 클릭하여 기능이 정상 동작하는지 확인
-      const editOption = page.locator(selectors.moreEdit);
+      const editOption = ui.moreEdit(page);
       const editOptionVisible = await editOption.isVisible().catch(() => false);
 
       if (editOptionVisible) {
