@@ -37,9 +37,21 @@ export const ui = {
 
   // 보기 타입 전환 (아이콘 버튼 등은 반드시 접근 가능한 name 필요)
   viewTypeToggle: (page: Page) =>
-    firstMatch(page.getByRole('button', { name: /보기\s*타입|view\s*type/i }), page.getByText(/보기\s*타입/i)),
-  viewTypeList: (page: Page) => page.getByRole('menuitem', { name: /리스트|list/i }),
-  viewTypeCard: (page: Page) => page.getByRole('menuitem', { name: /카드|card/i }),
+    // Dropdown 트리거 버튼은 선택 상태에 따라 텍스트가 바뀔 수 있음(예: '리스트 보기', '카드 보기')
+    firstMatch(
+      page.getByRole('button', { name: /보기\s*타입|view\s*type|리스트\s*보기|카드\s*보기/i }),
+      page.getByText(/보기\s*타입/i),
+    ),
+  viewTypeList: (page: Page) =>
+    firstMatch(
+      page.getByRole('menuitemradio', { name: /리스트|list/i }),
+      page.getByRole('menuitem', { name: /리스트|list/i }),
+    ),
+  viewTypeCard: (page: Page) =>
+    firstMatch(
+      page.getByRole('menuitemradio', { name: /카드|card/i }),
+      page.getByRole('menuitem', { name: /카드|card/i }),
+    ),
 
   // 서비스 게시판 (구현에 따라 label/placeholder 기반으로도 찾을 수 있게 유연하게)
   searchInput: (page: Page) =>

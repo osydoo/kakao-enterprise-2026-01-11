@@ -132,18 +132,18 @@ test.describe('기본 페이지 및 레이아웃 구성', () => {
     }
   });
 
-  test('TC-1-6: GNB 우측 보기 타입 드롭다운 표시 및 저장', async ({ page }) => {
+  test('TC-1-6: GNB 우측 보기 타입 dropdown 표시 및 저장', async ({ page }) => {
     await clearLocalStorage(page);
     await goToHome(page);
 
-    // 드롭다운 토글이 보이는지 확인
+    // dropdown 트리거(버튼 텍스트) 노출 확인
     await expect(ui.viewTypeToggle(page)).toBeVisible();
 
     // 카드 보기로 변경
     await changeViewType(page, 'card');
 
     // localStorage에 저장되는지 확인
-    const viewType = await getLocalStorage(page, 'homeViewType');
+    const viewType = await getLocalStorage(page, 'viewType');
     expect(viewType).toBe('card');
   });
 });
