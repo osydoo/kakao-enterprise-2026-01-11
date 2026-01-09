@@ -44,8 +44,22 @@ test.describe.skip('서비스 게시판 기본 기능 및 예외 처리', () => 
     const searchKeyword = '테스트';
     await searchBoard(page, searchKeyword, 'enter');
 
-    // 검색 결과 확인
+    // URL이 변경되고 검색 파라미터가 포함될 때까지 대기
+    await page.waitForURL((url) => url.searchParams.get('search') === searchKeyword, { timeout: 5000 });
+
+    // 네트워크 요청이 완료될 때까지 대기
+    await page.waitForLoadState('networkidle');
+
+    // 게시글 목록이 로드될 때까지 대기
     const boardTitles = ui.boardTitle(page);
+    await boardTitles
+      .first()
+      .waitFor({ state: 'visible', timeout: 5000 })
+      .catch(() => {
+        // 게시글이 없는 경우도 있으므로 에러 무시
+      });
+
+    // 검색 결과 확인
     const count = await boardTitles.count();
 
     // 검색 결과가 있는 경우, 검색어가 포함되어 있는지 확인
@@ -60,8 +74,22 @@ test.describe.skip('서비스 게시판 기본 기능 및 예외 처리', () => 
     const anotherKeyword = '게시글';
     await searchBoard(page, anotherKeyword, 'button');
 
-    // 검색 결과 확인
+    // URL이 변경되고 검색 파라미터가 포함될 때까지 대기
+    await page.waitForURL((url) => url.searchParams.get('search') === anotherKeyword, { timeout: 5000 });
+
+    // 네트워크 요청이 완료될 때까지 대기
+    await page.waitForLoadState('networkidle');
+
+    // 게시글 목록이 로드될 때까지 대기
     const boardTitlesAfter = ui.boardTitle(page);
+    await boardTitlesAfter
+      .first()
+      .waitFor({ state: 'visible', timeout: 5000 })
+      .catch(() => {
+        // 게시글이 없는 경우도 있으므로 에러 무시
+      });
+
+    // 검색 결과 확인
     const countAfter = await boardTitlesAfter.count();
 
     // 검색 결과가 있는 경우, 검색어가 포함되어 있는지 확인
