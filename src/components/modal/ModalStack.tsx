@@ -7,7 +7,7 @@ import type { ModalConfig } from '@/stores/modalStore';
 
 export const ModalStack: React.FC = () => {
   const modals = useModalStore((state) => state.modals);
-  const closeLastModal = useModalStore((state) => state.closeLastModal);
+  const closeLastModal = useModalStore((state) => state.actions.closeLastModal);
 
   // body 스크롤 방지
   useEffect(() => {

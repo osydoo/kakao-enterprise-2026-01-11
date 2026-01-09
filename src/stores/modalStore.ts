@@ -1,4 +1,5 @@
-import { create } from 'zustand';
+import { Store } from './store.type';
+import { createStore } from './store.util';
 
 export interface ModalConfig<T extends Record<string, unknown> = Record<string, unknown>> {
   id: string;
@@ -7,58 +8,58 @@ export interface ModalConfig<T extends Record<string, unknown> = Record<string, 
   props?: T;
 }
 
-interface ModalStore {
+interface ModalStoreState {
   modals: ModalConfig[];
-  openModal: (config: ModalConfig) => void;
+}
+
+interface ModalStoreAction {
+  openModal: <T extends Record<string, unknown>>(config: ModalConfig<T>) => void;
   closeModal: (id: string) => void;
   closeLastModal: () => void;
   closeAllModals: () => void;
   openedModal: (id: string) => boolean;
 }
 
-export const useModalStore = create<ModalStore>((set, get) => ({
+const initialState: ModalStoreState = {
   modals: [],
+};
 
-  openModal: (config: ModalConfig) => {
-    set((state) => ({
-      modals: [...state.modals, config],
-    }));
-  },
+export const useModalStore = createStore<Store<ModalStoreState, ModalStoreAction>>((set, get) => ({
+  ...initialState,
+  actions: {
+    openModal: <T extends Record<string, unknown>>(config: ModalConfig<T>) => {
+      set((state) => ({
+        modals: [...state.modals, config],
+      }));
+    },
+    closeModal: (id: string) => {
+      set((state) => ({
+        modals: state.modals.filter((modal) => modal.id !== id),
+      }));
+    },
 
-  closeModal: (id: string) => {
-    const { modals } = get();
-    const modalToClose = modals.find((modal) => modal.id === id);
+    closeLastModal: () => {
+      set((state) => ({
+        modals: state.modals.slice(0, -1),
+      }));
+    },
 
-    if (modalToClose?.callback) {
-      modalToClose.callback();
-    }
+    closeAllModals: () => {
+      const { modals } = get();
 
-    set((state) => ({
-      modals: state.modals.filter((modal) => modal.id !== id),
-    }));
-  },
+      // 모든 모달의 onClose 콜백을 실행
+      modals.forEach((modal) => {
+        if (modal.callback) {
+          modal.callback();
+        }
+      });
 
-  closeLastModal: () => {
-    set((state) => ({
-      modals: state.modals.slice(0, -1),
-    }));
-  },
+      set({ modals: [] });
+    },
 
-  closeAllModals: () => {
-    const { modals } = get();
-
-    // 모든 모달의 onClose 콜백을 실행
-    modals.forEach((modal) => {
-      if (modal.callback) {
-        modal.callback();
-      }
-    });
-
-    set({ modals: [] });
-  },
-
-  openedModal: (id: string) => {
-    const { modals } = get();
-    return modals.some((modal) => modal.id === id);
+    openedModal: (id: string) => {
+      const { modals } = get();
+      return modals.some((modal) => modal.id === id);
+    },
   },
 }));

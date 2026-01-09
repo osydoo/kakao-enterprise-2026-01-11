@@ -1,18 +1,18 @@
 import { useModalStore } from '@/stores/modalStore';
 import { ModalConfig } from '@/stores/modalStore';
 
-export type UseModalProps = ModalConfig;
+export type UseModalProps<T extends Record<string, unknown>> = ModalConfig<T>;
 
-export const useModal = (props: UseModalProps) => {
+export const useModal = <T extends Record<string, unknown>>(props: UseModalProps<T>) => {
   const { id } = props;
 
-  const openedModal = useModalStore((state) => state.openedModal);
-  const openModal = useModalStore((state) => state.openModal);
-  const closeModal = useModalStore((state) => state.closeModal);
-  const closeAllModals = useModalStore((state) => state.closeAllModals);
+  const openedModal = useModalStore((state) => state.actions.openedModal);
+  const openModal = useModalStore((state) => state.actions.openModal);
+  const closeModal = useModalStore((state) => state.actions.closeModal);
+  const closeAllModals = useModalStore((state) => state.actions.closeAllModals);
 
   const handleOpenModal = () => {
-    openModal(props);
+    openModal<T>(props);
   };
 
   const handleCloseModal = () => {
