@@ -83,7 +83,7 @@ export default function Pagination({
               aria-current={isActive ? 'page' : undefined}
               isActive={isActive}
               disabled={disabled}
-              onClick={() => onPageChange?.({ ...pagination, currentPage: item })}
+              onClick={() => (isActive ? undefined : onPageChange?.({ ...pagination, currentPage: item }))}
             >
               {item}
             </PageButton>

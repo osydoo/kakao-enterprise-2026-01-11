@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import { ModalStack } from '@/components/modal';
 import { DashboardShell } from '@/components/layout/DashboardShell';
+import { QueryProvider } from '@/providers/QueryProvider';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -30,8 +31,10 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-hidden`}>
-        <DashboardShell>{children}</DashboardShell>
-        <ModalStack />
+        <QueryProvider>
+          <DashboardShell>{children}</DashboardShell>
+          <ModalStack />
+        </QueryProvider>
       </body>
     </html>
   );
