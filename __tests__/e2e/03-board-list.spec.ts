@@ -10,7 +10,7 @@ import {
   clickPaginationNext,
 } from './utils/helpers';
 
-test.describe.skip('서비스 게시판 기본 기능 및 예외 처리', () => {
+test.describe('서비스 게시판 기본 기능 및 예외 처리', () => {
   test('TC-3-1: 서비스 게시판 기본 화면 확인', async ({ page }) => {
     // 서비스 게시판 접속
     await goToBoard(page);
@@ -131,7 +131,7 @@ test.describe.skip('서비스 게시판 기본 기능 및 예외 처리', () => 
     }
   });
 
-  test('TC-3-4: 게시글 등록 페이지 이동', async ({ page }) => {
+  test.skip('TC-3-4: 게시글 등록 페이지 이동', async ({ page }) => {
     // 서비스 게시판 접속
     await goToBoard(page);
 
@@ -146,7 +146,7 @@ test.describe.skip('서비스 게시판 기본 기능 및 예외 처리', () => 
     await expect(boardMenu).toHaveAttribute('aria-current', 'page');
   });
 
-  test('TC-3-5: 한 페이지당 최대 데이터 개수 확인', async ({ page }) => {
+  test.skip('TC-3-5: 한 페이지당 최대 데이터 개수 확인', async ({ page }) => {
     // 서비스 게시판 접속
     await goToBoard(page);
 
@@ -192,7 +192,7 @@ test.describe.skip('서비스 게시판 기본 기능 및 예외 처리', () => 
     }
   });
 
-  test('TC-3-6: 게시글이 없을 때 빈 상태 표시', async ({ page }) => {
+  test.skip('TC-3-6: 게시글이 없을 때 빈 상태 표시', async ({ page }) => {
     // 서비스 게시판 접속
     await goToBoard(page);
 

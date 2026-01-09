@@ -55,8 +55,13 @@ export const ui = {
 
   // 서비스 게시판 (구현에 따라 label/placeholder 기반으로도 찾을 수 있게 유연하게)
   searchInput: (page: Page) =>
-    firstMatch(page.getByRole('textbox', { name: /검색/i }), page.getByPlaceholder(/검색/i), page.getByLabel(/검색/i)),
-  searchButton: (page: Page) => firstMatch(page.getByRole('button', { name: /검색/i }), page.getByText('검색')),
+    firstMatch(page.getByRole('textbox', { name: /검색/i }), page.getByPlaceholder(/검색/i), page.getByLabel(/^검색$/)),
+  searchButton: (page: Page) =>
+    firstMatch(
+      page.getByRole('button', { name: /검색\s*실행|검색/i }),
+      page.getByText('검색'),
+      page.getByLabel(/검색\s*실행/i),
+    ),
   registerButton: (page: Page) =>
     firstMatch(page.getByRole('button', { name: /등록|작성/i }), page.getByRole('link', { name: /등록|작성/i })),
 
@@ -87,7 +92,15 @@ export const ui = {
 
   // 게시글 상세
   detailTitle: (page: Page) => page.getByRole('heading', { level: 1 }),
-  detailContent: (page: Page) => page.getByText(/./),
+  detailContent: (page: Page) =>
+    firstMatch(
+      // headline과 별도로 본문/내용 section이 별도의 landmark/role로 구분되어 있다면 우선 활용
+      page.getByRole('region', { name: /내용|content/i }),
+      // 내용 영역에 aria-label, aria-labelledby 등 액세스블 네임이 부여된 region 우선 활용
+      page.getByRole('region', { name: /본문|body/i }),
+      // aria-label 등으로 "내용"이 부여된 아무 element도 허용 (예, div[aria-label="내용"])
+      page.locator('[aria-label="내용"], [aria-label="content"], [aria-label="본문"], [aria-label="body"]'),
+    ),
   detailListButton: (page: Page) => page.getByRole('button', { name: /목록|리스트|back/i }),
   detailMoreButton: (page: Page) => page.getByRole('button', { name: /더보기|more/i }),
 
