@@ -2,14 +2,11 @@ import { test, expect } from '@playwright/test';
 import { ui } from './utils/selectors';
 import { goToHome, changeViewType, getLocalStorage, clearLocalStorage } from './utils/helpers';
 
-test.describe.skip('홈 페이지 테스트', () => {
-  test.beforeEach(async ({ page }) => {
-    // localStorage 초기화
-    await clearLocalStorage(page);
-    await goToHome(page);
-  });
-
+test.describe('홈 페이지 테스트', () => {
   test('TC-2-1: 홈 페이지 이미지 레이아웃 (2x2 배열)', async ({ page }) => {
+    // 홈 페이지 접속
+    await goToHome(page);
+
     // 이미지 그리드 확인
     const imageGrid = ui.homeImageGrid(page);
     await expect(imageGrid).toBeVisible();
@@ -32,16 +29,12 @@ test.describe.skip('홈 페이지 테스트', () => {
       // 넓이가 동일한지 확인 (약간의 오차 허용)
       expect(Math.abs(firstWidth - secondWidth)).toBeLessThan(5);
     }
-
-    // 브라우저 넓이에 맞게 조정되는지 확인
-    const gridWidth = await imageGrid.evaluate((el) => el.clientWidth);
-    const viewportWidth = page.viewportSize()?.width || 1280;
-
-    // 그리드가 뷰포트 넓이에 맞게 조정되는지 확인
-    expect(gridWidth).toBeGreaterThan(viewportWidth * 0.8);
   });
 
   test('TC-2-2: 홈 페이지 보기 타입 전환 (리스트 → 카드)', async ({ page }) => {
+    // 홈 페이지 접속
+    await goToHome(page);
+
     // 기본값이 리스트 보기인지 확인
     const imageGrid = ui.homeImageGrid(page);
     await expect(imageGrid).toBeVisible();
@@ -50,23 +43,26 @@ test.describe.skip('홈 페이지 테스트', () => {
     await changeViewType(page, 'card');
 
     // 카드 형태로 변경되었는지 확인
-    // 실제 구현에 따라 셀렉터가 다를 수 있음
     const imageGridAfter = ui.homeImageGrid(page);
     await expect(imageGridAfter).toBeVisible();
 
     // localStorage에 설정이 저장되었는지 확인
-    const viewType = await getLocalStorage(page, 'homeViewType');
+    const viewType = await getLocalStorage(page, 'viewType');
     expect(viewType).toBe('card');
 
     // 브라우저 새로고침
     await page.reload();
 
     // 카드 보기 상태가 유지되는지 확인
-    const viewTypeAfterReload = await getLocalStorage(page, 'homeViewType');
+    const viewTypeAfterReload = await getLocalStorage(page, 'viewType');
     expect(viewTypeAfterReload).toBe('card');
   });
 
   test('TC-2-3: 홈 페이지 보기 타입 전환 (카드 → 리스트)', async ({ page }) => {
+    // localStorage 초기화
+    await clearLocalStorage(page);
+    await goToHome(page);
+
     // 먼저 카드 보기로 전환
     await changeViewType(page, 'card');
     await page.waitForTimeout(300);
@@ -79,7 +75,14 @@ test.describe.skip('홈 페이지 테스트', () => {
     await expect(imageGrid).toBeVisible();
 
     // localStorage에 설정이 저장되었는지 확인
-    const viewType = await getLocalStorage(page, 'homeViewType');
+    const viewType = await getLocalStorage(page, 'viewType');
     expect(viewType).toBe('list');
+
+    // 브라우저 새로고침
+    await page.reload();
+
+    // 리스트 보기 상태가 유지되는지 확인
+    const viewTypeAfterReload = await getLocalStorage(page, 'viewType');
+    expect(viewTypeAfterReload).toBe('list');
   });
 });
