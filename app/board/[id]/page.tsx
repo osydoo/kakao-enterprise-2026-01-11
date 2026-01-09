@@ -1,13 +1,26 @@
+import { notFound } from 'next/navigation';
+import { getIssue } from '@/shared/github';
+import { BoardDetailContent } from '@/features/board/detail/BoardDetailContent';
+
 type Props = {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 };
 
-export default function BoardDetailPage({ params }: Props) {
-  const { id } = params;
-  return (
-    <div>
-      <h1 className="mb-4 text-xl font-bold">게시글 상세</h1>
-      <p className="text-sm text-zinc-600 dark:text-zinc-400">게시글 ID: {id}</p>
-    </div>
-  );
+export default async function BoardDetailPage({ params }: Props) {
+  const { id } = await params;
+  const issueNumber = parseInt(id, 10);
+
+  if (isNaN(issueNumber)) {
+    notFound();
+  }
+
+  let issue;
+  try {
+    issue = await getIssue(issueNumber);
+  } catch (error) {
+    console.error('게시글 조회 오류:', error);
+    notFound();
+  }
+
+  return <BoardDetailContent issue={issue} />;
 }
