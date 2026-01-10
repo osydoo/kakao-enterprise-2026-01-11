@@ -45,7 +45,7 @@ test.describe('서비스 게시판 기본 기능 및 예외 처리', () => {
     await goToBoard(page);
 
     // 검색어 입력
-    const searchKeyword = '테스트';
+    const searchKeyword = '테스트 이슈';
     await searchBoard(page, searchKeyword, 'enter');
 
     // 네트워크 요청이 완료될 때까지 대기 (Tanstack Query가 API 호출)
@@ -405,8 +405,9 @@ test.describe('서비스 게시판 기본 기능 및 예외 처리', () => {
       await expect(moreDropdown).toBeVisible();
 
       // "수정", "삭제" 옵션이 텍스트로 표시되는지 확인
-      const editText = page.getByText('수정');
-      const deleteText = page.getByText('삭제');
+      // "수정", "삭제" 텍스트가 드롭다운 메뉴 안에 있는지 명확히 제한
+      const editText = moreDropdown.getByText('수정', { exact: true });
+      const deleteText = moreDropdown.getByText('삭제', { exact: true });
 
       await expect(editText).toBeVisible();
       await expect(deleteText).toBeVisible();
@@ -456,8 +457,8 @@ test.describe('서비스 게시판 기본 기능 및 예외 처리', () => {
       await expect(moreDropdown).toBeVisible();
 
       // "수정", "삭제" 옵션이 텍스트로 표시되는지 확인
-      const editText = page.getByText('수정');
-      const deleteText = page.getByText('삭제');
+      const editText = moreDropdown.getByText('수정', { exact: true });
+      const deleteText = moreDropdown.getByText('삭제', { exact: true });
 
       await expect(editText).toBeVisible();
       await expect(deleteText).toBeVisible();

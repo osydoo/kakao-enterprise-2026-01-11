@@ -87,7 +87,6 @@ export async function fillBoardForm(page: Page, title: string, content: string) 
  */
 export async function submitBoardForm(page: Page) {
   await ui.formSubmit(page).click();
-  await page.waitForURL(routes.board);
 }
 
 /**
@@ -96,7 +95,6 @@ export async function submitBoardForm(page: Page) {
 export async function clickMoreButton(page: Page, index: number = 0) {
   const moreButtons = ui.boardMoreButton(page);
   await moreButtons.nth(index).click();
-  await page.waitForTimeout(200); // 드롭다운 애니메이션 대기
 }
 
 /**

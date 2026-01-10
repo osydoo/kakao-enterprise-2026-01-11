@@ -110,7 +110,9 @@ export const ui = {
   formContent: (page: Page) =>
     firstMatch(page.getByLabel(/내용/i), page.getByPlaceholder(/내용/i), page.getByRole('textbox', { name: /내용/i })),
   formSubmit: (page: Page) =>
-    firstMatch(page.getByRole('button', { name: /등록|저장|수정|submit/i }), page.getByText(/등록|저장|수정/)),
+    // form 내부의 submit 버튼만 찾기 위해 form을 먼저 찾고 그 안에서 버튼을 찾음
+    // getByText는 제거하여 h1 제목 등 다른 요소와 충돌하지 않도록 함
+    page.locator('form').getByRole('button', { name: /등록|저장|수정|등록하기|수정하기|submit/i }),
   formError: (page: Page) => page.getByRole('alert'),
 
   // 상태 표시

@@ -81,8 +81,8 @@ test.describe('게시글 상세 페이지 테스트', () => {
     await expect(dropdown).toBeVisible();
 
     // "수정", "삭제" 옵션이 텍스트로 표시되는지 확인
-    const editText = page.getByText('수정');
-    const deleteText = page.getByText('삭제');
+    const editText = dropdown.getByText('수정', { exact: true });
+    const deleteText = dropdown.getByText('삭제', { exact: true });
 
     await expect(editText).toBeVisible();
     await expect(deleteText).toBeVisible();
