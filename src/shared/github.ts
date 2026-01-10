@@ -19,7 +19,7 @@ export interface GetIssuesParams {
   search?: string;
 }
 
-export async function getIssues(params?: GetIssuesParams) {
+export async function getIssuesApi(params?: GetIssuesParams) {
   try {
     const { page = 1, per_page = 10, search } = params || {};
 
@@ -64,7 +64,7 @@ export async function getIssues(params?: GetIssuesParams) {
   }
 }
 
-export async function getIssue(issueNumber: number) {
+export async function getIssueApi(issueNumber: number) {
   try {
     const response = await octokit.rest.issues.get({
       owner: GITHUB_OWNER,
@@ -79,7 +79,7 @@ export async function getIssue(issueNumber: number) {
   }
 }
 
-export async function getIssuesCount(search?: string) {
+export async function getIssuesCountApi(search?: string) {
   try {
     if (search) {
       const response = await octokit.rest.search.issuesAndPullRequests({
@@ -99,19 +99,5 @@ export async function getIssuesCount(search?: string) {
   } catch (error) {
     console.error('GitHub API 호출 오류:', error);
     return 0;
-  }
-}
-
-export async function deleteIssue(issueNumber: number) {
-  try {
-    await octokit.rest.issues.update({
-      owner: GITHUB_OWNER,
-      repo: GITHUB_REPO,
-      issue_number: issueNumber,
-      state: 'closed',
-    });
-  } catch (error) {
-    console.error('GitHub API 호출 오류:', error);
-    throw error;
   }
 }

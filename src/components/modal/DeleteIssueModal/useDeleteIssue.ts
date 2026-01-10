@@ -24,7 +24,7 @@ export const useDeleteIssue = () => {
   });
 
   const handleDeleteIssue = (issueNumber: number) => {
-    mutate(issueNumber);
+    mutate({ issueNumber });
   };
 
   return { isPending, handleDeleteIssue };

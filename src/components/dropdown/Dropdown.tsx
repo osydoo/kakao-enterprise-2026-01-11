@@ -41,35 +41,41 @@ export default function Dropdown<TValue extends string | number = string>({
     placeholder,
   });
 
+  const handleTriggerClick = () => {
+    if (disabled) return;
+    if (open) {
+      close();
+      return;
+    }
+    const selectedIndex = isDefined(selectedValue) ? items.findIndex((i) => i.value === selectedValue) : -1;
+    const idx = selectedIndex !== -1 ? selectedIndex : getFirstEnabledIndex(items, 0);
+    if (idx !== -1) openAndFocus(idx);
+  };
+
+  const triggerProps = {
+    ref: triggerRef,
+    id: triggerId,
+    'aria-haspopup': 'menu' as const,
+    'aria-expanded': open,
+    'aria-controls': menuId,
+    onClick: handleTriggerClick,
+    onKeyDown: onTriggerKeyDown,
+    disabled,
+  };
+
   return (
     <div className={['relative inline-flex', className].join(' ')}>
       {customTrigger ? (
-        customTrigger
+        customTrigger(triggerProps)
       ) : (
         <button
-          ref={triggerRef}
-          id={triggerId}
+          {...triggerProps}
           type="button"
           className={[
             baseButtonClass,
             disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer',
             buttonClassName,
           ].join(' ')}
-          aria-haspopup="menu"
-          aria-expanded={open}
-          aria-controls={menuId}
-          disabled={disabled}
-          onClick={() => {
-            if (disabled) return;
-            if (open) {
-              close();
-              return;
-            }
-            const selectedIndex = isDefined(selectedValue) ? items.findIndex((i) => i.value === selectedValue) : -1;
-            const idx = selectedIndex !== -1 ? selectedIndex : getFirstEnabledIndex(items, 0);
-            if (idx !== -1) openAndFocus(idx);
-          }}
-          onKeyDown={onTriggerKeyDown}
         >
           <span className="truncate">{triggerLabel}</span>
           <ChevronDownIcon size={16} className={open ? 'rotate-180 transition-transform' : 'transition-transform'} />

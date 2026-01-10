@@ -1,19 +1,9 @@
 'use client';
 
-import { useEffect } from 'react';
-import { usePathname, useSearchParams } from 'next/navigation';
-import { useBoardLoadingStore } from '@/stores/boardLoadingStore';
+import { usePageLoadingStore } from '@/stores/pageLoadingStore';
 
-export function BoardLoading() {
-  const isLoading = useBoardLoadingStore((state) => state.isLoading);
-  const setLoading = useBoardLoadingStore((state) => state.actions.setLoading);
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-
-  // URL이 변경되면 로딩 상태 해제
-  useEffect(() => {
-    setLoading(false);
-  }, [pathname, searchParams, setLoading]);
+export function PageLoading() {
+  const isLoading = usePageLoadingStore((state) => state.isLoading);
 
   if (!isLoading) {
     return null;

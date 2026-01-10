@@ -76,15 +76,16 @@ export function BoardDetailContent({ issue }: BoardDetailContentProps) {
           </div>
           <Dropdown
             items={dropdownItems}
-            customTrigger={
+            customTrigger={(props) => (
               <button
+                {...props}
                 type="button"
                 aria-label="더보기"
                 className="flex h-8 w-8 items-center justify-center rounded-md border border-zinc-300 bg-white text-zinc-700 hover:bg-zinc-50 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700"
               >
                 <MoreVertical size={16} />
               </button>
-            }
+            )}
             onChange={handleDropdownChange}
           />
         </div>

@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { getIssue } from '@/shared/github';
+import { getIssueApi } from '@/shared/github';
 import { BoardDetailContent } from '@/features/board/detail/BoardDetailContent';
 
 type Props = {
@@ -16,7 +16,7 @@ export default async function BoardDetailPage({ params }: Props) {
 
   let issue;
   try {
-    issue = await getIssue(issueNumber);
+    issue = await getIssueApi(issueNumber);
   } catch (error) {
     console.error('게시글 조회 오류:', error);
     notFound();

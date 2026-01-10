@@ -19,8 +19,8 @@ export function DashboardShell({ children }: Props) {
   const { viewType, setViewType } = useViewType();
 
   return (
-    <>
-      <header className="fixed top-0 left-0 right-0 z-50 flex h-14 items-center justify-between border-b border-zinc-200 bg-white/80 px-6 backdrop-blur dark:border-zinc-800 dark:bg-zinc-950/80">
+    <div className="grid h-full grid-cols-[240px_1fr] grid-rows-[56px_1fr]">
+      <header className="col-span-2 z-50 flex h-14 items-center justify-between border-b border-zinc-200 bg-white/80 px-6 backdrop-blur dark:border-zinc-800 dark:bg-zinc-950/80">
         <div className="font-semibold">대시보드</div>
         <div className="flex items-center gap-3">
           <Dropdown<ViewType>
@@ -40,7 +40,7 @@ export function DashboardShell({ children }: Props) {
         </div>
       </header>
 
-      <aside className="fixed top-14 bottom-0 left-0 z-40 w-60 border-r border-zinc-200 bg-white px-3 py-4 dark:border-zinc-800 dark:bg-zinc-950">
+      <aside className="z-40 border-r border-zinc-200 bg-white px-3 py-4 dark:border-zinc-800 dark:bg-zinc-950 overflow-auto">
         <nav className="flex flex-col gap-1">
           <Link
             href="/"
@@ -70,9 +70,7 @@ export function DashboardShell({ children }: Props) {
         </nav>
       </aside>
 
-      <main className="fixed top-14 right-0 bottom-0 left-60 overflow-auto bg-zinc-50 p-6 dark:bg-black">
-        {children}
-      </main>
-    </>
+      <main className="overflow-auto bg-zinc-50 p-6 dark:bg-black">{children}</main>
+    </div>
   );
 }

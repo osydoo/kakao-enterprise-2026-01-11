@@ -3,19 +3,19 @@
 import { createStore } from './store.util';
 import { type Store } from './store.type';
 
-type BoardLoadingState = {
+type PageLoadingState = {
   isLoading: boolean;
 };
 
-type BoardLoadingActions = {
+type PageLoadingActions = {
   setLoading: (loading: boolean) => void;
 };
 
-const initialState: BoardLoadingState = {
+const initialState: PageLoadingState = {
   isLoading: false,
 };
 
-export const useBoardLoadingStore = createStore<Store<BoardLoadingState, BoardLoadingActions>>((set) => ({
+export const usePageLoadingStore = createStore<Store<PageLoadingState, PageLoadingActions>>((set) => ({
   ...initialState,
   actions: {
     setLoading: (loading: boolean) => {

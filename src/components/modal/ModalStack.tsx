@@ -8,6 +8,7 @@ import type { ModalConfig } from '@/stores/modalStore';
 export const ModalStack: React.FC = () => {
   const modals = useModalStore((state) => state.modals);
   const closeLastModal = useModalStore((state) => state.actions.closeLastModal);
+  const closeAllModals = useModalStore((state) => state.actions.closeAllModals);
 
   // body 스크롤 방지
   useEffect(() => {
@@ -21,6 +22,8 @@ export const ModalStack: React.FC = () => {
       document.body.style.overflow = 'unset';
     };
   }, [modals.length]);
+
+  useEffect(() => closeAllModals(), [closeAllModals]);
 
   // ESC 키로 모달 닫기
   useEffect(
@@ -59,7 +62,11 @@ export const ModalStack: React.FC = () => {
           <div key={modal.id} className="fixed inset-0" style={{ zIndex }}>
             {isFirstModal && <div className="absolute inset-0 bg-black opacity-30" />}
             <div className="absolute inset-0 overflow-auto">
-              <div className="flex min-h-full items-center justify-center p-4" onClick={handleBackdropClick}>
+              <div
+                role="dialog"
+                className="flex min-h-full items-center justify-center p-4"
+                onClick={handleBackdropClick}
+              >
                 <Component {...props} />
               </div>
             </div>

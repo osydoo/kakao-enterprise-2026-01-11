@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { deleteIssue } from '@/shared/github';
+import { deleteIssueApi } from '@/api/issues';
 
 export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
@@ -10,7 +10,7 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
       return NextResponse.json({ error: 'Invalid issue number' }, { status: 400 });
     }
 
-    await deleteIssue(issueNumber);
+    await deleteIssueApi({ issueNumber });
 
     return NextResponse.json({ success: true });
   } catch (error) {
