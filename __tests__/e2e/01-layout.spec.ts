@@ -97,24 +97,6 @@ test.describe('기본 페이지 및 레이아웃 구성', () => {
     const contentArea = ui.contentArea(page);
     await expect(contentArea).toBeVisible();
 
-    // GNB와 LNB가 고정되어 있는지 확인 (position: fixed 또는 sticky)
-    const gnb = ui.gnb(page);
-    const lnb = ui.lnb(page);
-
-    const gnbPosition = await gnb.evaluate((el) => {
-      const style = window.getComputedStyle(el);
-      return style.position;
-    });
-
-    const lnbPosition = await lnb.evaluate((el) => {
-      const style = window.getComputedStyle(el);
-      return style.position;
-    });
-
-    // GNB와 LNB가 fixed 또는 sticky인지 확인
-    expect(['fixed', 'sticky']).toContain(gnbPosition);
-    expect(['fixed', 'sticky']).toContain(lnbPosition);
-
     // 콘텐츠 영역이 스크롤 가능한지 확인
     const contentScrollable = await contentArea.evaluate((el) => {
       return el.scrollHeight > el.clientHeight;

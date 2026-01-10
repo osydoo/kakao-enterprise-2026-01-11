@@ -75,8 +75,8 @@ export const ui = {
 
   // 더보기 드롭다운/메뉴
   moreDropdown: (page: Page) => page.getByRole('menu'),
-  moreEdit: (page: Page) => page.getByRole('menuitem', { name: /수정|edit/i }),
-  moreDelete: (page: Page) => page.getByRole('menuitem', { name: /삭제|delete/i }),
+  moreEdit: (page: Page) => page.getByRole('menuitemradio', { name: /수정|edit/i }),
+  moreDelete: (page: Page) => page.getByRole('menuitemradio', { name: /삭제|delete/i }),
 
   // 모달(삭제 확인 등)
   deleteModal: (page: Page) => page.getByRole('dialog'),

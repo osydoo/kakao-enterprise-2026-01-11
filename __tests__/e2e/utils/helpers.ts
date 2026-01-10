@@ -21,6 +21,7 @@ async function ensureStorageAvailable(page: Page) {
  */
 export async function goToHome(page: Page) {
   await page.goto(routes.home);
+  await page.waitForLoadState('networkidle');
 }
 
 /**
@@ -28,6 +29,7 @@ export async function goToHome(page: Page) {
  */
 export async function goToBoard(page: Page) {
   await page.goto(routes.board);
+  await page.waitForLoadState('networkidle');
 }
 
 /**
@@ -201,7 +203,19 @@ export async function expectActiveMenu(page: Page, menu: 'home' | 'board') {
  */
 export async function getBoardCount(page: Page, viewType: 'list' | 'card' = 'list'): Promise<number> {
   if (viewType === 'list') {
-    return await ui.boardRow(page).count();
+    // tbody 내의 row만 세도록 수정 (thead 제외)
+    const tbody = page.locator('table > tbody');
+    const tbodyExists = (await tbody.count()) > 0;
+
+    if (tbodyExists) {
+      return await tbody.locator('tr[role="row"]').count();
+    } else {
+      // tbody가 없는 경우 전체 row에서 thead row 제외
+      const allRows = ui.boardRow(page);
+      const totalCount = await allRows.count();
+      // thead의 row는 보통 1개이므로 제외
+      return Math.max(0, totalCount - 1);
+    }
   } else {
     return await ui.boardCard(page).count();
   }
