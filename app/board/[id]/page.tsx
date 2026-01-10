@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import { getIssueApi } from '@/shared/github';
-import { BoardDetailContent } from '@/features/board/detail/BoardDetailContent';
+import { BoardDetailContent } from '@/features/board/[id]/BoardDetailContent';
 
 type Props = {
   params: Promise<{ id: string }>;

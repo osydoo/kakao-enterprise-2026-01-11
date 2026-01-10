@@ -5,9 +5,9 @@ import Link from 'next/link';
 import { MoreVertical, Calendar, User, Hash } from 'lucide-react';
 import Dropdown from '@/components/dropdown/Dropdown';
 import { useModal } from '@/hooks/useModal';
-import DELETE_ISSUE_MODAL from '@/components/modal/DeleteIssueModal/DeleteIssueModal';
+import DELETE_ISSUE_MODAL from '@/components/modal/deleteIssueModal/DeleteIssueModal';
 import { formatDate } from '@/utils/date';
-import type { Issue } from '@/shared/github';
+import type { Issue } from '@/shared/github.types';
 
 interface BoardDetailContentProps {
   issue: Issue;
@@ -91,7 +91,6 @@ export function BoardDetailContent({ issue }: BoardDetailContentProps) {
         </div>
       </div>
 
-      {/* 본문 영역 */}
       <div className="rounded-lg border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-950">
         <div className="prose prose-sm max-w-none dark:prose-invert">
           {issue.body ? (
@@ -104,7 +103,6 @@ export function BoardDetailContent({ issue }: BoardDetailContentProps) {
         </div>
       </div>
 
-      {/* 하단 액션 영역 */}
       <div className="flex items-center justify-between rounded-lg border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-950">
         <div className="text-sm text-zinc-600 dark:text-zinc-400">게시글 번호: #{issue.number}</div>
         <Link

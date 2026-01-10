@@ -1,9 +1,9 @@
 import { useRouter } from 'next/navigation';
 import { useModal } from '@/hooks/useModal';
 import { formatDate } from '@/utils/date';
-import { Issue } from '@/shared/github';
+import type { Issue } from '@/shared/github.types';
 import Dropdown from '@/components/dropdown/Dropdown';
-import DELETE_ISSUE_MODAL from '@/components/modal/DeleteIssueModal/DeleteIssueModal';
+import DELETE_ISSUE_MODAL from '@/components/modal/deleteIssueModal/DeleteIssueModal';
 import { MoreHorizontal } from 'lucide-react';
 import Link from 'next/link';
 

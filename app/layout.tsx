@@ -4,7 +4,7 @@ import './globals.css';
 import { ModalStack } from '@/components/modal';
 import { DashboardShell } from '@/components/layout/DashboardShell';
 import { QueryProvider } from '@/providers/QueryProvider';
-import { PageLoading } from '@/components/modal/loading/pageLoading';
+import { PageLoading } from '@/components/modal/loading/PageLoading';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',

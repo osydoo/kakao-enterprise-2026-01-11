@@ -25,7 +25,7 @@ export function useBoard() {
 
   useEffect(() => {
     setLoading(issueQuery.isPending);
-  }, [issueQuery.isPending]);
+  }, [issueQuery.isPending, setLoading]);
 
   const handleChangePage = (page: Pagination) => {
     setPagination({ ...pagination, currentPage: page.currentPage });
