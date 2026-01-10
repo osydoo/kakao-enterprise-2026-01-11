@@ -1,23 +1,13 @@
-// app/lib/github.ts
+/**
+ * GitHub API 호출 함수들
+ * 서버 사이드에서만 실행되어야 합니다.
+ * 클라이언트에서는 API 라우트를 통해 호출해야 합니다.
+ */
 import { octokit, GITHUB_OWNER, GITHUB_REPO } from './octokit';
+import type { Issue, GetIssuesParams } from './github.types';
 
-export interface Issue {
-  id: number;
-  number: number;
-  title: string;
-  body: string | null;
-  created_at: string;
-  updated_at: string;
-  user: {
-    login: string;
-  };
-}
-
-export interface GetIssuesParams {
-  page?: number;
-  per_page?: number;
-  search?: string;
-}
+// 타입 재export (클라이언트에서도 사용 가능)
+export type { Issue, GetIssuesParams };
 
 export async function getIssuesApi(params?: GetIssuesParams) {
   try {
@@ -99,5 +89,52 @@ export async function getIssuesCountApi(search?: string) {
   } catch (error) {
     console.error('GitHub API 호출 오류:', error);
     return 0;
+  }
+}
+
+export async function createIssue(title: string, body: string) {
+  try {
+    const response = await octokit.rest.issues.create({
+      owner: GITHUB_OWNER,
+      repo: GITHUB_REPO,
+      title,
+      body,
+    });
+
+    return response.data as Issue;
+  } catch (error) {
+    console.error('GitHub API 호출 오류:', error);
+    throw error;
+  }
+}
+
+export async function updateIssue(issueNumber: number, title: string, body: string) {
+  try {
+    const response = await octokit.rest.issues.update({
+      owner: GITHUB_OWNER,
+      repo: GITHUB_REPO,
+      issue_number: issueNumber,
+      title,
+      body,
+    });
+
+    return response.data as Issue;
+  } catch (error) {
+    console.error('GitHub API 호출 오류:', error);
+    throw error;
+  }
+}
+
+export async function deleteIssue(issueNumber: number) {
+  try {
+    await octokit.rest.issues.update({
+      owner: GITHUB_OWNER,
+      repo: GITHUB_REPO,
+      issue_number: issueNumber,
+      state: 'closed',
+    });
+  } catch (error) {
+    console.error('GitHub API 호출 오류:', error);
+    throw error;
   }
 }

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getIssuesApi, getIssuesCountApi } from '@/shared/github';
+import { getIssuesApi, getIssuesCountApi, createIssue } from '@/shared/github';
 
 export async function GET(request: NextRequest) {
   try {
@@ -26,5 +26,27 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     console.error('게시글 목록 조회 오류:', error);
     return NextResponse.json({ error: 'Failed to get issues' }, { status: 500 });
+  }
+}
+
+export async function POST(request: NextRequest) {
+  try {
+    const body = await request.json();
+    const { title, content } = body;
+
+    if (!title || !title.trim()) {
+      return NextResponse.json({ error: '제목은 필수입니다.' }, { status: 400 });
+    }
+
+    if (!content || !content.trim()) {
+      return NextResponse.json({ error: '내용은 필수입니다.' }, { status: 400 });
+    }
+
+    const issue = await createIssue(title.trim(), content.trim());
+
+    return NextResponse.json(issue);
+  } catch (error) {
+    console.error('게시글 등록 오류:', error);
+    return NextResponse.json({ error: 'Failed to create issue' }, { status: 500 });
   }
 }
