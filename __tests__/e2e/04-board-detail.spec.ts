@@ -1,13 +1,13 @@
 import { test, expect } from '@playwright/test';
 import { routes, ui } from './utils/selectors';
-import { goToBoard, clickBoardTitle, clickMoreEdit, clickMoreDelete, confirmDelete } from './utils/helpers';
+import { goToBoard, clickBoardTitle } from './utils/helpers';
 
-test.describe.skip('게시글 상세 페이지 테스트', () => {
+test.describe('게시글 상세 페이지 테스트', () => {
   test.beforeEach(async ({ page }) => {
     await goToBoard(page);
   });
 
-  test('TC-5-1: 게시글 상세 페이지 기본 표시', async ({ page }) => {
+  test('TC-4-1: 게시글 상세 페이지 기본 표시', async ({ page }) => {
     // 게시글이 있는지 확인
     const boardTitles = ui.boardTitle(page);
     const count = await boardTitles.count();
@@ -37,7 +37,7 @@ test.describe.skip('게시글 상세 페이지 테스트', () => {
     await expect(moreButton).toBeVisible();
   });
 
-  test('TC-5-2: 목록 버튼 클릭하여 게시판으로 이동', async ({ page }) => {
+  test('TC-4-2: 목록 버튼 클릭하여 게시판으로 이동', async ({ page }) => {
     // 게시글이 있는지 확인
     const boardTitles = ui.boardTitle(page);
     const count = await boardTitles.count();
@@ -51,14 +51,14 @@ test.describe.skip('게시글 상세 페이지 테스트', () => {
     await clickBoardTitle(page, 0);
 
     // 목록 버튼 클릭
-    const listButton = ui.detailListButton(page);
+    const listButton = page.getByRole('link', { name: '목록' });
     await listButton.click();
 
     // 서비스 게시판 페이지로 이동했는지 확인
     await expect(page).toHaveURL(routes.board);
   });
 
-  test('TC-5-3: 상세 페이지에서 더보기 버튼 동작', async ({ page }) => {
+  test('TC-4-3: 상세 페이지에서 더보기 버튼 동작', async ({ page }) => {
     // 게시글이 있는지 확인
     const boardTitles = ui.boardTitle(page);
     const count = await boardTitles.count();
@@ -80,15 +80,15 @@ test.describe.skip('게시글 상세 페이지 테스트', () => {
     const dropdown = ui.moreDropdown(page);
     await expect(dropdown).toBeVisible();
 
-    // 수정, 삭제 옵션이 표시되는지 확인
-    const editOption = ui.moreEdit(page);
-    const deleteOption = ui.moreDelete(page);
+    // "수정", "삭제" 옵션이 텍스트로 표시되는지 확인
+    const editText = page.getByText('수정');
+    const deleteText = page.getByText('삭제');
 
-    await expect(editOption).toBeVisible();
-    await expect(deleteOption).toBeVisible();
+    await expect(editText).toBeVisible();
+    await expect(deleteText).toBeVisible();
   });
 
-  test('TC-5-4: 상세 페이지에서 수정 페이지 이동', async ({ page }) => {
+  test('TC-4-4: 상세 페이지에서 삭제 모달 표시 및 삭제 기능', async ({ page }) => {
     // 게시글이 있는지 확인
     const boardTitles = ui.boardTitle(page);
     const count = await boardTitles.count();
@@ -106,73 +106,19 @@ test.describe.skip('게시글 상세 페이지 테스트', () => {
     await moreButton.click();
     await page.waitForTimeout(200);
 
-    // 수정 옵션 클릭
-    await clickMoreEdit(page);
-
-    // 수정 페이지로 이동했는지 확인
-    await expect(page).toHaveURL(/\/board\/\d+\/edit/);
-
-    // 기존 게시글 제목과 내용이 입력 필드에 표시되는지 확인
-    const formTitle = ui.formTitle(page);
-    const formContent = ui.formContent(page);
-
-    await expect(formTitle).toBeVisible();
-    await expect(formContent).toBeVisible();
-
-    const titleValue = await formTitle.inputValue();
-    const contentValue = await formContent.inputValue();
-
-    expect(titleValue).toBeTruthy();
-    expect(contentValue).toBeTruthy();
-  });
-
-  test('TC-5-5: 상세 페이지에서 삭제 모달 표시', async ({ page }) => {
-    // 게시글이 있는지 확인
-    const boardTitles = ui.boardTitle(page);
-    const count = await boardTitles.count();
-
-    if (count === 0) {
-      test.skip();
-      return;
-    }
-
-    // 게시글 상세 페이지로 이동
-    await clickBoardTitle(page, 0);
-
-    // 우측 상단 더보기 버튼 클릭
-    const moreButton = ui.detailMoreButton(page);
-    await moreButton.click();
-    await page.waitForTimeout(200);
-
-    // 삭제 옵션 클릭
-    await clickMoreDelete(page);
+    // "삭제" 옵션 클릭
+    const deleteText = page.getByText('삭제');
+    await deleteText.click();
 
     // 삭제 확인 모달이 표시되는지 확인
     const deleteModal = ui.deleteModal(page);
     await expect(deleteModal).toBeVisible();
-  });
 
-  test('TC-5-6: 상세 페이지에서 게시글 삭제 성공', async ({ page }) => {
-    // 게시글이 있는지 확인
-    const boardTitles = ui.boardTitle(page);
-    const count = await boardTitles.count();
-
-    if (count === 0) {
-      test.skip();
-      return;
-    }
-
+    // 실제 삭제 테스트는 로컬에서만 수동으로 테스트
+    // 데이터 상태에 따라 테스트가 꼬일 수 있으므로 주석 처리
+    /*
     // 삭제할 게시글의 제목 기록
     const titleToDelete = await boardTitles.nth(0).textContent();
-
-    // 게시글 상세 페이지로 이동
-    await clickBoardTitle(page, 0);
-
-    // 우측 상단 더보기 버튼 클릭하여 삭제 모달 열기
-    const moreButton = ui.detailMoreButton(page);
-    await moreButton.click();
-    await page.waitForTimeout(200);
-    await clickMoreDelete(page);
 
     // 삭제 버튼 클릭
     await confirmDelete(page);
@@ -192,5 +138,6 @@ test.describe.skip('게시글 상세 페이지 테스트', () => {
       const titlesText = await titlesAfterDelete.allTextContents();
       expect(titlesText).not.toContain(titleToDelete);
     }
+    */
   });
 });

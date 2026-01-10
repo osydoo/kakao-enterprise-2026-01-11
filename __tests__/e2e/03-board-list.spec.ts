@@ -196,6 +196,9 @@ test.describe('서비스 게시판 기본 기능 및 예외 처리', () => {
     // 서비스 게시판 접속
     await goToBoard(page);
 
+    // "서비스 게시판" 텍스트가 나타날 때까지 대기 (페이지 로드 및 React Query 초기화 확인)
+    await page.getByText('서비스 게시판').waitFor({ state: 'visible' });
+
     // 존재하지 않는 검색어로 빈 상태 만들기
     const randomSearchKeyword = `__e2e_empty__${Date.now()}`;
     await searchBoard(page, randomSearchKeyword, 'enter');
@@ -203,14 +206,17 @@ test.describe('서비스 게시판 기본 기능 및 예외 처리', () => {
     // 네트워크 요청이 완료될 때까지 대기 (Tanstack Query가 API 호출)
     await page.waitForLoadState('networkidle');
 
-    // 게시글 목록이 비어있는지 확인
+    // 게시글 목록이 비어있는지 먼저 확인
     const boardTitles = ui.boardTitle(page);
-    const titleCount = await boardTitles.count();
-    expect(titleCount).toBe(0);
+    await expect(boardTitles).toHaveCount(0);
 
     // 빈 상태 메시지가 나타날 때까지 대기
-    const emptyMessage = ui.emptyMessage(page);
-    await expect(emptyMessage).toBeVisible({ timeout: 5000 });
+    // section 내부에서 메시지를 찾도록 더 구체적인 셀렉터 사용
+    const boardListSection = ui.contentArea(page).getByRole('region', { name: '게시글 목록' });
+    const emptyMessage = boardListSection.getByText(/등록된 게시글이 없습니다/i);
+
+    // 빈 상태 메시지가 표시될 때까지 대기
+    await expect(emptyMessage).toBeVisible();
 
     // 메시지 텍스트 확인
     const message = await emptyMessage.textContent();
