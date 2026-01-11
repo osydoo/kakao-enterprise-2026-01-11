@@ -1,7 +1,7 @@
 import { Store } from './store.type';
 import { createStore } from './store.util';
 
-export interface ModalConfig<T extends Record<string, unknown> = Record<string, unknown>> {
+export interface ModalConfig<T = Record<string, unknown>> {
   id: string;
   Component: React.FC<T>;
   callback?: () => void;
@@ -13,7 +13,7 @@ interface ModalStoreState {
 }
 
 interface ModalStoreAction {
-  openModal: <T extends Record<string, unknown>>(config: ModalConfig<T>) => void;
+  openModal: <T>(config: ModalConfig<T>) => void;
   closeModal: (id: string) => void;
   closeLastModal: () => void;
   closeAllModals: () => void;
@@ -27,7 +27,7 @@ const initialState: ModalStoreState = {
 export const useModalStore = createStore<Store<ModalStoreState, ModalStoreAction>>((set, get) => ({
   ...initialState,
   actions: {
-    openModal: <T extends Record<string, unknown>>(config: ModalConfig<T>) => {
+    openModal: <T>(config: ModalConfig<T>) => {
       set((state) => ({
         modals: [...state.modals, config],
       }));

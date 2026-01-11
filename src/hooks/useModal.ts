@@ -1,9 +1,9 @@
 import { useModalStore } from '@/stores/modalStore';
 import { ModalConfig } from '@/stores/modalStore';
 
-export type UseModalProps<T extends Record<string, unknown>> = ModalConfig<T>;
+export type UseModalProps<T> = ModalConfig<T>;
 
-export const useModal = <T extends Record<string, unknown>>(props: UseModalProps<T>) => {
+export const useModal = <T>(props: UseModalProps<T>) => {
   const { id } = props;
 
   const openedModal = useModalStore((state) => state.actions.openedModal);
