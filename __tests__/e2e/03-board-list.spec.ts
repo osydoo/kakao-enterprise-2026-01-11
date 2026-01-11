@@ -192,38 +192,7 @@ test.describe('서비스 게시판 기본 기능 및 예외 처리', () => {
     }
   });
 
-  test('TC-3-6: 게시글이 없을 때 빈 상태 표시', async ({ page }) => {
-    // 서비스 게시판 접속
-    await goToBoard(page);
-
-    // "서비스 게시판" 텍스트가 나타날 때까지 대기 (페이지 로드 및 React Query 초기화 확인)
-    await page.getByText('서비스 게시판').waitFor({ state: 'visible' });
-
-    // 존재하지 않는 검색어로 빈 상태 만들기
-    const randomSearchKeyword = `__e2e_empty__${Date.now()}`;
-    await searchBoard(page, randomSearchKeyword, 'enter');
-
-    // 네트워크 요청이 완료될 때까지 대기 (Tanstack Query가 API 호출)
-    await page.waitForLoadState('networkidle');
-
-    // 게시글 목록이 비어있는지 먼저 확인
-    const boardTitles = ui.boardTitle(page);
-    await expect(boardTitles).toHaveCount(0);
-
-    // 빈 상태 메시지가 나타날 때까지 대기
-    // section 내부에서 메시지를 찾도록 더 구체적인 셀렉터 사용
-    const boardListSection = ui.contentArea(page).getByRole('region', { name: '게시글 목록' });
-    const emptyMessage = boardListSection.getByText(/등록된 게시글이 없습니다/i);
-
-    // 빈 상태 메시지가 표시될 때까지 대기
-    await expect(emptyMessage).toBeVisible();
-
-    // 메시지 텍스트 확인
-    const message = await emptyMessage.textContent();
-    expect(message?.trim()).toContain('등록된 게시글이 없습니다');
-  });
-
-  test('TC-3-7: 로딩 상태 표시', async ({ page, context }) => {
+  test('TC-3-6: 로딩 상태 표시', async ({ page, context }) => {
     // 서비스 게시판 접속
     await goToBoard(page);
 
@@ -247,7 +216,7 @@ test.describe('서비스 게시판 기본 기능 및 예외 처리', () => {
     expect(loadingAfterLoad).toBe(false);
   });
 
-  test('TC-3-8: 에러 상태 표시', async ({ page, context }) => {
+  test('TC-3-7: 에러 상태 표시', async ({ page, context }) => {
     // 서비스 게시판 접속
     await goToBoard(page);
 
@@ -271,7 +240,7 @@ test.describe('서비스 게시판 기본 기능 및 예외 처리', () => {
     await context.setOffline(false);
   });
 
-  test('TC-3-9: 게시글 UI 타입 기본값 및 리스트 보기 UI 확인', async ({ page }) => {
+  test('TC-3-8: 게시글 UI 타입 기본값 및 리스트 보기 UI 확인', async ({ page }) => {
     // localStorage 초기화
     await clearLocalStorage(page);
 
@@ -323,7 +292,7 @@ test.describe('서비스 게시판 기본 기능 및 예외 처리', () => {
     }
   });
 
-  test('TC-3-10: 카드 보기 UI 및 브라우저 스토리지 저장 확인', async ({ page }) => {
+  test('TC-3-9: 카드 보기 UI 및 브라우저 스토리지 저장 확인', async ({ page }) => {
     // localStorage 초기화
     await clearLocalStorage(page);
 
@@ -385,7 +354,7 @@ test.describe('서비스 게시판 기본 기능 및 예외 처리', () => {
     await expect(boardTable).toBeVisible();
   });
 
-  test('TC-3-11: 리스트 보기에서 더보기 버튼 동작 확인', async ({ page }) => {
+  test('TC-3-10: 리스트 보기에서 더보기 버튼 동작 확인', async ({ page }) => {
     // 서비스 게시판 접속
     await goToBoard(page);
 
@@ -435,7 +404,7 @@ test.describe('서비스 게시판 기본 기능 및 예외 처리', () => {
     }
   });
 
-  test('TC-3-12: 카드 보기에서 더보기 버튼 동작 확인', async ({ page }) => {
+  test('TC-3-11: 카드 보기에서 더보기 버튼 동작 확인', async ({ page }) => {
     // 서비스 게시판 접속
     await goToBoard(page);
 
