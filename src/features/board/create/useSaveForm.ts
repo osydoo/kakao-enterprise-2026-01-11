@@ -19,7 +19,7 @@ export const useSaveForm = ({ initialTitle, initialContent, onSubmit }: Props) =
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting, isDirty },
     setError: setFormError,
   } = useForm<BoardFormData>({
     defaultValues: {
@@ -47,7 +47,7 @@ export const useSaveForm = ({ initialTitle, initialContent, onSubmit }: Props) =
 
   return {
     register,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting, isDirty },
     handleSubmit: handleSubmit(onSubmitForm),
   };
 };

@@ -1,6 +1,8 @@
 'use client';
 
+import { useBeforeUnload } from './useBeforeUnload';
 import { useSaveForm } from './useSaveForm';
+import { useRouteChange } from './useRouteChange';
 
 interface BoardFormProps {
   initialTitle?: string;
@@ -18,8 +20,11 @@ export function BoardForm({
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting, isDirty },
   } = useSaveForm({ initialTitle, initialContent, onSubmit });
+  useBeforeUnload({ isSubmitting, isDirty });
+  useRouteChange({ isDirty, isSubmitting });
+
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
